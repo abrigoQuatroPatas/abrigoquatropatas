@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/services/ONG/ONG.iml" filepath="$PROJECT_DIR$/services/ONG/ONG.iml" />
+      <module fileurl="file://$PROJECT_DIR$/services/abrigoQuatroPatas/abrigoQuatroPatas.iml" filepath="$PROJECT_DIR$/services/abrigoQuatroPatas/abrigoQuatroPatas.iml" />
+      <module fileurl="file://$PROJECT_DIR$/services/client/client.iml" filepath="$PROJECT_DIR$/services/client/client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/services/eureka/eureka.iml" filepath="$PROJECT_DIR$/services/eureka/eureka.iml" />
+      <module fileurl="file://$PROJECT_DIR$/services/pet/pet.iml" filepath="$PROJECT_DIR$/services/pet/pet.iml" />
+      <module fileurl="file://$PROJECT_DIR$/services/voluntary/voluntary.iml" filepath="$PROJECT_DIR$/services/voluntary/voluntary.iml" />
+    </modules>
+  </component>
+</project>

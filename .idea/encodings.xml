@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/services/ONG/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/services/abrigoQuatroPatas/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/services/client/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/services/eureka/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/services/pet/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/services/voluntary/src/main/java" charset="UTF-8" />
+  </component>
+</project>
