@@ -11,8 +11,8 @@
         <module name="client" />
         <module name="voluntary" />
         <module name="abrigoQuatroPatas" />
-        <module name="pet" />
         <module name="eureka" />
+        <module name="pet" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
