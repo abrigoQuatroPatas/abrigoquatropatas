@@ -62,14 +62,6 @@ class ClientServiceTest {
     }
 
     @Test
-    void postException() {
-        Mockito.when(modelMapper.map(this.clientDto, ClientEntity.class)).thenReturn(this.clientEntity);
-
-        service.post(this.clientDto);
-        Mockito.verify(repository).save(this.clientEntity);
-    }
-
-    @Test
     void get() {
         Mockito.when(repository.findById("42612289046")).thenReturn(Optional.ofNullable(this.clientEntity));
 
