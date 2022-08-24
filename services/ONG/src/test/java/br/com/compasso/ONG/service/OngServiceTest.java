@@ -4,6 +4,7 @@ import br.com.compasso.ONG.dto.request.RequestAddressDto;
 import br.com.compasso.ONG.dto.request.RequestOngDto;
 import br.com.compasso.ONG.entity.OngEntity;
 import br.com.compasso.ONG.repository.OngRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +14,7 @@ import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -72,6 +74,12 @@ class OngServiceTest {
     }
 
     @Test
+    void getException() {
+        Mockito.when(repository.findById("45984180000121")).thenReturn(Optional.ofNullable(this.ongEntity));
+        Assertions.assertThrows(ResponseStatusException.class,() -> service.get("4261228904"));
+    }
+
+    @Test
     void update() {
         Mockito.when(repository.findById("45984180000121")).thenReturn(Optional.ofNullable(this.ongEntity));
 
@@ -80,10 +88,22 @@ class OngServiceTest {
     }
 
     @Test
+    void updateException() {
+        Mockito.when(repository.findById("45984180000121")).thenReturn(Optional.ofNullable(this.ongEntity));
+        Assertions.assertThrows(ResponseStatusException.class,() -> service.update("53934042040", this.ongDto));
+    }
+
+    @Test
     void delete() {
         Mockito.when(repository.findById("45984180000121")).thenReturn(Optional.ofNullable(this.ongEntity));
 
         service.delete("45984180000121");
         Mockito.verify(repository).delete(this.ongEntity);
+    }
+
+    @Test
+    void deleteException() {
+        Mockito.when(repository.findById("45984180000121")).thenReturn(Optional.ofNullable(this.ongEntity));
+        Assertions.assertThrows(ResponseStatusException.class,() -> service.delete("53934042040"));
     }
 }
