@@ -1,8 +1,7 @@
 package br.com.compasso.voluntary.dto.request;
 
-import com.compass.volunteer.entity.AddressEntity;
-import com.compass.volunteer.enums.StatusEnum;
-import com.compass.volunteer.enums.TypeEnum;
+import br.com.compasso.voluntary.enums.StatusEnum;
+import br.com.compasso.voluntary.enums.TypeEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,8 +9,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.br.CPF;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @AllArgsConstructor
@@ -22,14 +21,14 @@ public class RequestVoluntaryDto {
 
     @CPF
     private String cpf;
-    @NotBlank
+    @NotBlank(message = "Name field cannot be blank")
     private String name;
-    @Valid
+    @NotNull(message = "Type field cannot be blank")
     private TypeEnum type;
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate birthDate;
-    @Valid
+    @NotNull(message = "Address field cannot be blank")
     private RequestAddressDto address;
-    @Valid
+    @NotNull(message = "Status field cannot be blank")
     private StatusEnum status;
 }

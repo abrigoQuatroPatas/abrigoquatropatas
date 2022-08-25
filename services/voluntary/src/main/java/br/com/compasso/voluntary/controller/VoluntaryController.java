@@ -1,8 +1,8 @@
 package br.com.compasso.voluntary.controller;
 
-import com.compass.volunteer.dto.request.RequestVolunteerDto;
-import com.compass.volunteer.dto.response.ResponseVolunteerDto;
-import com.compass.volunteer.service.VolunteerService;
+import br.com.compasso.voluntary.dto.request.RequestVoluntaryDto;
+import br.com.compasso.voluntary.dto.response.ResponseVoluntaryDto;
+import br.com.compasso.voluntary.service.VoluntaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,29 +18,29 @@ import java.net.URI;
 public class VoluntaryController {
 
     @Autowired
-    private VolunteerService service;
+    private VoluntaryService service;
 
     @GetMapping
-    public ResponseEntity<Page<ResponseVolunteerDto>> getAll(Pageable pageable) {
-        Page<ResponseVolunteerDto> volunteers = service.getAll(pageable);
+    public ResponseEntity<Page<ResponseVoluntaryDto>> getAll(Pageable pageable) {
+        Page<ResponseVoluntaryDto> volunteers = service.getAll(pageable);
         return ResponseEntity.ok(volunteers);
     }
 
     @GetMapping("/{cpf}")
-    public ResponseEntity<ResponseVolunteerDto> get(@PathVariable String cpf) {
-        ResponseVolunteerDto volunteer = service.get(cpf);
+    public ResponseEntity<ResponseVoluntaryDto> get(@PathVariable String cpf) {
+        ResponseVoluntaryDto volunteer = service.get(cpf);
         return ResponseEntity.ok(volunteer);
     }
 
     @PostMapping
-    public ResponseEntity<ResponseVolunteerDto> post(@RequestBody @Valid RequestVolunteerDto volunteer, UriComponentsBuilder componentsBuilder) {
-        ResponseVolunteerDto volunteerDto = service.post(volunteer);
+    public ResponseEntity<ResponseVoluntaryDto> post(@RequestBody @Valid RequestVoluntaryDto volunteer, UriComponentsBuilder componentsBuilder) {
+        ResponseVoluntaryDto volunteerDto = service.post(volunteer);
         URI uri = componentsBuilder.path("/VOLUNTEER/{cpf}").buildAndExpand(volunteerDto.getCpf()).toUri();
         return ResponseEntity.created(uri).body(volunteerDto);
     }
 
     @PutMapping("/{cpf}")
-    public ResponseEntity<Void> put(@PathVariable String cpf, @RequestBody @Valid RequestVolunteerDto volunteer) {
+    public ResponseEntity<Void> put(@PathVariable String cpf, @RequestBody @Valid RequestVoluntaryDto volunteer) {
         service.update(cpf, volunteer);
         return ResponseEntity.noContent().build();
     }

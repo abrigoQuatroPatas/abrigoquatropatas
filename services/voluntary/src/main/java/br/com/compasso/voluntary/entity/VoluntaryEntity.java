@@ -1,7 +1,7 @@
 package br.com.compasso.voluntary.entity;
 
-import com.compass.volunteer.enums.StatusEnum;
-import com.compass.volunteer.enums.TypeEnum;
+import br.com.compasso.voluntary.enums.StatusEnum;
+import br.com.compasso.voluntary.enums.TypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

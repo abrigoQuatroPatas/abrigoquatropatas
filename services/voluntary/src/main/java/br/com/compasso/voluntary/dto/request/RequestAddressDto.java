@@ -13,16 +13,16 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor
 public class RequestAddressDto {
 
-    @NotEmpty
+    @NotEmpty(message = "Zip code cannot be null or empty")
     private String zipCode;
-    @NotEmpty
+    @NotEmpty(message = "Street cannot be null or empty")
     private String street;
-    @NotEmpty
+    @NotEmpty(message = "City cannot be null or empty")
     private String city;
-    @NotEmpty
+    @NotEmpty(message = "State cannot be null or empty")
     private String state;
-    @NotEmpty
+    @NotEmpty(message = "Number cannot be null or empty")
     private String number;
-    @NotEmpty
+    @NotEmpty(message = "District cannot be null or empty")
     private String district;
 }

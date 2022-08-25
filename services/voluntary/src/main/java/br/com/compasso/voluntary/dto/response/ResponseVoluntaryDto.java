@@ -1,8 +1,8 @@
 package br.com.compasso.voluntary.dto.response;
 
-import com.compass.volunteer.entity.AddressEntity;
-import com.compass.volunteer.enums.StatusEnum;
-import com.compass.volunteer.enums.TypeEnum;
+import br.com.compasso.voluntary.entity.AddressEntity;
+import br.com.compasso.voluntary.enums.StatusEnum;
+import br.com.compasso.voluntary.enums.TypeEnum;
 import lombok.Data;
 
 import java.time.LocalDate;
