@@ -1,4 +1,4 @@
-package com.compass.volunteer.entity;
+package br.com.compasso.voluntary.entity;
 
 import com.compass.volunteer.enums.StatusEnum;
 import com.compass.volunteer.enums.TypeEnum;
@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document
-public class VolunteerEntity {
+public class VoluntaryEntity {
 
     @Id
     private String cpf;

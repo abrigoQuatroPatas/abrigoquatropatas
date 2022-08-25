@@ -1,4 +1,4 @@
-package com.compass.volunteer.dto.response;
+package br.com.compasso.voluntary.dto.response;
 
 import com.compass.volunteer.entity.AddressEntity;
 import com.compass.volunteer.enums.StatusEnum;
@@ -8,7 +8,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class ResponseVolunteerDto {
+public class ResponseVoluntaryDto {
 
     private String cpf;
     private String name;

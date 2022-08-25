@@ -1,4 +1,4 @@
-package com.compass.volunteer.enums;
+package br.com.compasso.voluntary.enums;
 
 public enum StatusEnum {
 

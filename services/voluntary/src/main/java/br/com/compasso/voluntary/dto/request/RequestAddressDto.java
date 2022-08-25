@@ -1,4 +1,4 @@
-package com.compass.volunteer.dto.request;
+package br.com.compasso.voluntary.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

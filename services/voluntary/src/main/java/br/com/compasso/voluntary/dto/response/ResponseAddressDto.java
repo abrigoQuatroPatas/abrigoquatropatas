@@ -1,4 +1,4 @@
-package com.compass.volunteer.dto.response;
+package br.com.compasso.voluntary.dto.response;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package com.compass.volunteer.controller;
+package br.com.compasso.voluntary.controller;
 
 import com.compass.volunteer.dto.request.RequestVolunteerDto;
 import com.compass.volunteer.dto.response.ResponseVolunteerDto;
@@ -15,7 +15,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/VOLUNTEER")
-public class VolunteerController {
+public class VoluntaryController {
 
     @Autowired
     private VolunteerService service;
