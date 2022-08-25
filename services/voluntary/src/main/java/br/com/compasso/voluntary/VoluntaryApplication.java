@@ -1,13 +1,13 @@
-package br.com.compasso.voluntary;
+package com.compass.volunteer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class VoluntaryApplication {
+public class VolunteerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(VoluntaryApplication.class, args);
+		SpringApplication.run(VolunteerApplication.class, args);
 	}
 
 }

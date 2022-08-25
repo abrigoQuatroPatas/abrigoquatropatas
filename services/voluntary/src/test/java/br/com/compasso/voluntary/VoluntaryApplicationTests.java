@@ -1,10 +1,10 @@
-package br.com.compasso.voluntary;
+package com.compass.volunteer;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class VoluntaryApplicationTests {
+class VolunteerApplicationTests {
 
 	@Test
 	void contextLoads() {
