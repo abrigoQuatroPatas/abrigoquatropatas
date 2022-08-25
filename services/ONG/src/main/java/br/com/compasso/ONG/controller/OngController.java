@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/ONG")
+@RequestMapping("/ong")
 public class OngController {
 
     @Autowired
