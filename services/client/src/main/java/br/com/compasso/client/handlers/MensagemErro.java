@@ -1,4 +1,4 @@
-package br.com.compasso.client.handler;
+package br.com.compasso.client.handlers;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;

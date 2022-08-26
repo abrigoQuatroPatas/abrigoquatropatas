@@ -1,8 +1,8 @@
-package br.com.compasso.client.controller;
+package br.com.compasso.client.controllers;
 
-import br.com.compasso.client.dto.request.RequestClientDto;
-import br.com.compasso.client.dto.response.ResponseClientDto;
-import br.com.compasso.client.service.ClientService;
+import br.com.compasso.client.dtos.request.RequestClientDto;
+import br.com.compasso.client.dtos.response.ResponseClientDto;
+import br.com.compasso.client.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

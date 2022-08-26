@@ -1,9 +1,9 @@
-package br.com.compasso.client.service;
+package br.com.compasso.client.services;
 
-import br.com.compasso.client.dto.request.RequestAddressDto;
-import br.com.compasso.client.dto.request.RequestClientDto;
-import br.com.compasso.client.entity.ClientEntity;
-import br.com.compasso.client.repository.ClientRepository;
+import br.com.compasso.client.dtos.request.RequestAddressDto;
+import br.com.compasso.client.dtos.request.RequestClientDto;
+import br.com.compasso.client.entitys.ClientEntity;
+import br.com.compasso.client.repositorys.ClientRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

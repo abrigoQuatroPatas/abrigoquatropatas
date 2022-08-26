@@ -1,4 +1,4 @@
-package br.com.compasso.client.config;
+package br.com.compasso.client.configs;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

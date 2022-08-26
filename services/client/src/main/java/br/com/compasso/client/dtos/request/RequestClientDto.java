@@ -1,4 +1,4 @@
-package br.com.compasso.client.dto.request;
+package br.com.compasso.client.dtos.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;

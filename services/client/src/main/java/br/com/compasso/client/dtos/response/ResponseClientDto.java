@@ -1,7 +1,7 @@
-package br.com.compasso.client.dto.response;
+package br.com.compasso.client.dtos.response;
 
-import br.com.compasso.client.entity.Address;
-import br.com.compasso.client.enums.Status;
+import br.com.compasso.client.entitys.Address;
+import br.com.compasso.client.enums.StatusEnum;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -14,5 +14,5 @@ public class ResponseClientDto {
     private LocalDate birthDate;
     private Address address;
     private String email;
-    private Status status;
+    private StatusEnum statusEnum;
 }
