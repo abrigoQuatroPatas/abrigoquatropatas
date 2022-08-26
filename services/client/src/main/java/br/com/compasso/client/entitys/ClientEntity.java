@@ -1,6 +1,6 @@
-package br.com.compasso.client.entity;
+package br.com.compasso.client.entitys;
 
-import br.com.compasso.client.enums.Status;
+import br.com.compasso.client.enums.StatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +23,6 @@ public class ClientEntity {
     private LocalDate birthDate;
     private Address address;
     private String email;
-    private Status status;
+    private StatusEnum statusEnum;
 
 }

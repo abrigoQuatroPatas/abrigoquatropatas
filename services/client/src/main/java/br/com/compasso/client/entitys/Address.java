@@ -1,4 +1,4 @@
-package br.com.compasso.client.entity;
+package br.com.compasso.client.entitys;
 
 import lombok.Data;
 

@@ -1,6 +1,6 @@
-package br.com.compasso.client.repository;
+package br.com.compasso.client.repositorys;
 
-import br.com.compasso.client.entity.ClientEntity;
+import br.com.compasso.client.entitys.ClientEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
