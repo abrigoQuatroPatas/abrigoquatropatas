@@ -1,4 +1,4 @@
-package br.com.compasso.ONG.dto.request;
+package br.com.compasso.client.dtos.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

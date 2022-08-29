@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: abrigo_quatro_patas-ms
+    name: abrigo-quatro-patas-ms
   datasource:
     url: jdbc:mysql://localhost:3306/abrigo_quatro_patas?useTimezone=true&serverTimezone=America/Sao_Paulo&createDatabaseIfNotExist=true
     username: root
