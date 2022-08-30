@@ -17,7 +17,6 @@ public class OngService {
 
     @Autowired
     private OngRepository ongRepository;
-
     @Autowired
     private ModelMapper modelMapper;
 

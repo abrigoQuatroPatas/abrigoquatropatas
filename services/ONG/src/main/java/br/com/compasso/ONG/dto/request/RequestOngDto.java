@@ -1,9 +1,10 @@
 package br.com.compasso.ONG.dto.request;
 
-import br.com.compasso.ONG.entity.Address;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.br.CNPJ;
 
 import javax.validation.constraints.NotBlank;
@@ -13,6 +14,8 @@ import java.time.LocalDate;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class RequestOngDto {
 
     @CNPJ
