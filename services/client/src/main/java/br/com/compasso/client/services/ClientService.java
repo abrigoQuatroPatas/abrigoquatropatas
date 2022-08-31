@@ -3,6 +3,7 @@ package br.com.compasso.client.services;
 import br.com.compasso.client.dtos.request.RequestClientDto;
 import br.com.compasso.client.dtos.response.ResponseClientDto;
 import br.com.compasso.client.entitys.ClientEntity;
+import br.com.compasso.client.enums.StatusEnum;
 import br.com.compasso.client.repositorys.ClientRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,34 @@ public class ClientService {
         ClientEntity clientEntity = clientRepository.findById(cpf).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND));
         modelMapper.map(client, clientEntity);
+        clientRepository.save(clientEntity);
+    }
+
+    public void putStatusInProgress(String cpf) {
+        ClientEntity clientEntity = clientRepository.findById(cpf).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND));
+        clientEntity.setStatusEnum(StatusEnum.IN_PROGRESS);
+        clientRepository.save(clientEntity);
+    }
+
+    public void putStatusDisapproved(String cpf) {
+        ClientEntity clientEntity = clientRepository.findById(cpf).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND));
+        clientEntity.setStatusEnum(StatusEnum.DISAPPROVED);
+        clientRepository.save(clientEntity);
+    }
+
+    public void putStatusNull(String cpf) {
+        ClientEntity clientEntity = clientRepository.findById(cpf).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND));
+        clientEntity.setStatusEnum(null);
+        clientRepository.save(clientEntity);
+    }
+
+    public void putStatusApproved(String cpf) {
+        ClientEntity clientEntity = clientRepository.findById(cpf).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND));
+        clientEntity.setStatusEnum(StatusEnum.APPROVED);
         clientRepository.save(clientEntity);
     }
 

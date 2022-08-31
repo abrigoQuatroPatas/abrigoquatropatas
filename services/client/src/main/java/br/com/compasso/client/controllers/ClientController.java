@@ -45,6 +45,30 @@ public class ClientController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/{cpf}/inProgress")
+    public ResponseEntity<Void> putStatusInProgress(@PathVariable String cpf) {
+        service.putStatusInProgress(cpf);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{cpf}/approved")
+    public ResponseEntity<Void> putStatusDisapproved(@PathVariable String cpf) {
+        service.putStatusApproved(cpf);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{cpf}/disapproved")
+    public ResponseEntity<Void> putStatusApproved(@PathVariable String cpf) {
+        service.putStatusDisapproved(cpf);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{cpf}/null")
+    public ResponseEntity<Void> putStatusNull(@PathVariable String cpf) {
+        service.putStatusNull(cpf);
+        return ResponseEntity.noContent().build();
+    }
+
     @DeleteMapping("/{cpf}")
     public ResponseEntity<Void> delete(@PathVariable String cpf) {
         service.delete(cpf);
