@@ -3,6 +3,7 @@ package br.com.compasso.pet.services;
 import br.com.compasso.pet.dtos.request.PetRequestDto;
 import br.com.compasso.pet.dtos.response.PetResponseDto;
 import br.com.compasso.pet.entities.PetEntity;
+import br.com.compasso.pet.https.OngClient;
 import br.com.compasso.pet.repositories.PetRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -22,6 +23,10 @@ public class PetService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private OngClient ong;
+
 
     public PetResponseDto postPet(PetRequestDto petRequestDto) {
         log.info("postPet() - START - Saving pet");
@@ -75,4 +80,5 @@ public class PetService {
 
         log.info("deletePet() - END - Pet deleted");
     }
+
 }

@@ -52,4 +52,20 @@ public class OngService {
                 new ResponseStatusException(HttpStatus.NOT_FOUND));
         ongRepository.delete(ongEntity);
     }
+
+    public void putAmount(String cnpj, String type) {
+        OngEntity ong = ongRepository.findById(cnpj).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if(type.equals("dog")) {
+            Integer amountDog = ong.getAmountDog();
+            ong.setAmountDog(amountDog +1);
+            ongRepository.save(ong);
+        } else if (type.equals("cat")) {
+            Integer amountCat = ong.getAmountCat();
+            ong.setAmountCat(amountCat +1);
+            ongRepository.save(ong);
+        }
+    }
+
 }

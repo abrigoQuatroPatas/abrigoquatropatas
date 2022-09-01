@@ -20,10 +20,11 @@ public class OngController {
     @Autowired
     private OngService service;
 
+
     @PostMapping
     public ResponseEntity<ResponseOngDto> post(@RequestBody @Valid RequestOngDto ong, UriComponentsBuilder component) {
         ResponseOngDto ongCadastrada = service.post(ong);
-        URI uri = component.path("/ONG/{cnpj}").buildAndExpand(ongCadastrada.getCnpj()).toUri();
+        URI uri = component.path("/ong/{cnpj}").buildAndExpand(ongCadastrada.getCnpj()).toUri();
         return ResponseEntity.created(uri).body(ongCadastrada);
     }
 
@@ -42,6 +43,12 @@ public class OngController {
     @PutMapping("/{cnpj}")
     public ResponseEntity<Void> put(@PathVariable String cnpj, @RequestBody @Valid RequestOngDto ong) {
         service.update(cnpj, ong);
+        return ResponseEntity.noContent().build();
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/ong/{cnpj}/amount/{type}")
+    public ResponseEntity<Void> putAmount(@PathVariable String cnpj, @PathVariable String type) {
+        service.putAmount(cnpj, type);
         return ResponseEntity.noContent().build();
     }
 
