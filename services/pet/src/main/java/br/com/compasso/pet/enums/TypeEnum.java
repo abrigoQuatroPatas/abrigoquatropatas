@@ -1,6 +1,6 @@
 package br.com.compasso.pet.enums;
 
-import br.com.compasso.pet.advices.GenericException;
+import br.com.compasso.pet.exceptions.GenericException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 

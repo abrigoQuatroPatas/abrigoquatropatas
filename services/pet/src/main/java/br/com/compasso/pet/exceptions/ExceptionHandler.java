@@ -1,6 +1,5 @@
 package br.com.compasso.pet.exceptions;
 
-import br.com.compasso.pet.advices.GenericException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

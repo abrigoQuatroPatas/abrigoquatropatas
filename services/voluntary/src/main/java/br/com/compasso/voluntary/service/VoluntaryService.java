@@ -3,7 +3,9 @@ package br.com.compasso.voluntary.service;
 import br.com.compasso.voluntary.dto.request.RequestVoluntaryDto;
 import br.com.compasso.voluntary.dto.response.ResponseVoluntaryDto;
 import br.com.compasso.voluntary.entity.VoluntaryEntity;
+import br.com.compasso.voluntary.httpclient.ZipCodeClient;
 import br.com.compasso.voluntary.repository.VoluntaryRepository;
+import br.com.compasso.voluntary.response.ZipCodeResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,9 @@ public class VoluntaryService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private ZipCodeClient zipCodeClient;
+
     public Page<ResponseVoluntaryDto> getAll(Pageable pageable) {
         Page<VoluntaryEntity> all = repository.findAll(pageable);
         return all.map(volunteer -> modelMapper.map(volunteer, ResponseVoluntaryDto.class));
@@ -36,6 +41,16 @@ public class VoluntaryService {
         if (repository.existsById(VoluntaryEntity.getCpf())) {
             throw new ResponseStatusException(HttpStatus.OK);
         }
+
+        String zipCode = volunteer.getAddress().getZipCode();
+
+        ZipCodeResponse zipCodeResponse = zipCodeClient.findAddressByVolunteeer(zipCode).block();
+
+        VoluntaryEntity.getAddress().setState(zipCodeResponse.getState());
+        VoluntaryEntity.getAddress().setCity(zipCodeResponse.getCity());
+        VoluntaryEntity.getAddress().setDistrict(zipCodeResponse.getDistrict());
+        VoluntaryEntity.getAddress().setStreet(zipCodeResponse.getStreet());
+
         VoluntaryEntity save = repository.save(VoluntaryEntity);
         return modelMapper.map(save, ResponseVoluntaryDto.class);
     }

@@ -15,15 +15,11 @@ public class RequestAddressDto {
 
     @NotBlank
     private String zipCode;
-    @NotBlank
     private String street;
-    @NotBlank
     private String city;
-    @NotBlank
     private String state;
     @NotBlank
     private String number;
-    @NotBlank
     private String district;
 
 }

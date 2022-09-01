@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/VOLUNTEER")
+@RequestMapping("/volunteer")
 public class VoluntaryController {
 
     @Autowired
@@ -35,7 +35,7 @@ public class VoluntaryController {
     @PostMapping
     public ResponseEntity<ResponseVoluntaryDto> post(@RequestBody @Valid RequestVoluntaryDto volunteer, UriComponentsBuilder componentsBuilder) {
         ResponseVoluntaryDto volunteerDto = service.post(volunteer);
-        URI uri = componentsBuilder.path("/VOLUNTEER/{cpf}").buildAndExpand(volunteerDto.getCpf()).toUri();
+        URI uri = componentsBuilder.path("/volunteer/{cpf}").buildAndExpand(volunteerDto.getCpf()).toUri();
         return ResponseEntity.created(uri).body(volunteerDto);
     }
 

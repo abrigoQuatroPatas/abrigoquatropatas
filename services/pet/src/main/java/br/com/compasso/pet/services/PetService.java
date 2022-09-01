@@ -3,7 +3,10 @@ package br.com.compasso.pet.services;
 import br.com.compasso.pet.dtos.request.PetRequestDto;
 import br.com.compasso.pet.dtos.response.PetResponseDto;
 import br.com.compasso.pet.entities.PetEntity;
+import br.com.compasso.pet.httpclient.ZipCodeClient;
 import br.com.compasso.pet.repositories.PetRepository;
+
+import br.com.compasso.pet.response.ZipCodeResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +26,23 @@ public class PetService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private ZipCodeClient zipCodeClient;
+
     public PetResponseDto postPet(PetRequestDto petRequestDto) {
         log.info("postPet() - START - Saving pet");
 
         PetEntity petEntity = modelMapper.map(petRequestDto, PetEntity.class);
+
+        String zipCode = petRequestDto.getRedemptionAddress().getZipCode();
+
+        ZipCodeResponse zipCodeResponse = zipCodeClient.findRedemptionAddressByPet(zipCode).block();
+
+        petEntity.getRedemptionAddress().setState(zipCodeResponse.getState());
+        petEntity.getRedemptionAddress().setCity(zipCodeResponse.getCity());
+        petEntity.getRedemptionAddress().setDistrict(zipCodeResponse.getDistrict());
+        petEntity.getRedemptionAddress().setStreet(zipCodeResponse.getStreet());
+
         PetEntity save = petRepository.save(petEntity);
 
         log.info("postPet() - END - Pet saved");
