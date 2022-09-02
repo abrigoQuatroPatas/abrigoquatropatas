@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Data
 @AllArgsConstructor
@@ -16,6 +17,7 @@ public class RequestAddressDto {
     private String street;
     private String city;
     private String state;
+    @Size(max = 10)
     @NotEmpty(message = "Number cannot be null or empty")
     private String number;
     private String district;

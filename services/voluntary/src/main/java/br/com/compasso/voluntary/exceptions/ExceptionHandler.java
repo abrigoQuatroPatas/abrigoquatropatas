@@ -25,15 +25,6 @@ public class ExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @org.springframework.web.bind.annotation.ExceptionHandler(DateTimeParseException.class)
-    public Map<String, String> handleDateTimeException(DateTimeParseException ex) {
-        Map<String, String> errorMap = new HashMap<>();
-        errorMap.put("errorMessage", "Expected: dd/MM/yyyy, Received: " + ex.getParsedString());
-        log.error("handleDateTimeParseException() - " + errorMap.toString() + "  " + ex.getMessage());
-        return errorMap;
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @org.springframework.web.bind.annotation.ExceptionHandler(JsonMappingException.class)
     public Map<String, String> handleJsonMappingException(JsonMappingException ex) {
         Map<String, String> errorMap = new HashMap<>();

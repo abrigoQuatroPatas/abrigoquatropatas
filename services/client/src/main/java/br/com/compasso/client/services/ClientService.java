@@ -6,6 +6,7 @@ import br.com.compasso.client.entitys.ClientEntity;
 import br.com.compasso.client.httpclient.ZipCodeClient;
 import br.com.compasso.client.repositorys.ClientRepository;
 import br.com.compasso.client.response.ZipCodeResponse;
+import br.com.compasso.client.validations.Validations;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,7 +32,11 @@ public class ClientService {
             throw new ResponseStatusException(HttpStatus.OK);
         }
 
-        String zipCode = client.getAddress().getZipCode();
+        String zipCode = client.getAddress().getZipCode().replaceAll("\\D", "" );
+
+        if (Validations.validateZipCode(zipCode)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,  "Invalid zipCode!");
+        }
 
         ZipCodeResponse zipCodeResponse = zipCodeClient.findAddressByClient(zipCode).block();
 
@@ -39,6 +44,8 @@ public class ClientService {
         clientEntity.getAddress().setCity(zipCodeResponse.getCity());
         clientEntity.getAddress().setDistrict(zipCodeResponse.getDistrict());
         clientEntity.getAddress().setStreet(zipCodeResponse.getStreet());
+
+        clientEntity.getAddress().setZipCode(zipCode.replaceAll("\\D", ""));
 
         ClientEntity save = clientRepository.save(clientEntity);
         return modelMapper.map(save, ResponseClientDto.class);

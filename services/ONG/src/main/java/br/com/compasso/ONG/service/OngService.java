@@ -6,6 +6,7 @@ import br.com.compasso.ONG.entity.OngEntity;
 import br.com.compasso.ONG.httpclient.ZipCodeClient;
 import br.com.compasso.ONG.repository.OngRepository;
 import br.com.compasso.ONG.response.ZipCodeResponse;
+import br.com.compasso.ONG.validations.Validations;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,7 +30,11 @@ public class OngService {
             throw new ResponseStatusException(HttpStatus.OK);
         }
 
-        String zipCode = ong.getAddress().getZipCode();
+        String zipCode = ong.getAddress().getZipCode().replaceAll("\\D", "" );
+
+        if (Validations.validateZipCode(zipCode)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,  "Invalid zipCode!");
+        }
 
         ZipCodeResponse zipCodeResponse = zipCodeClient.findAddressByOng(zipCode).block();
 
@@ -37,6 +42,8 @@ public class OngService {
         ongEntity.getAddress().setCity(zipCodeResponse.getCity());
         ongEntity.getAddress().setDistrict(zipCodeResponse.getDistrict());
         ongEntity.getAddress().setStreet(zipCodeResponse.getStreet());
+
+        ongEntity.getAddress().setZipCode(zipCode.replaceAll("\\D", ""));
 
         OngEntity save = ongRepository.save(ongEntity);
 

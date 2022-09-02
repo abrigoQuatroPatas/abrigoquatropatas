@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Data
 @Builder
@@ -19,6 +20,7 @@ public class RequestAddressDto {
     private String city;
     private String state;
     @NotBlank
+    @Size(max=10)
     private String number;
     private String district;
 

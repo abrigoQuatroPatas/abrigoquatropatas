@@ -14,19 +14,19 @@ public class ZipCodeService {
     private final WebClient webClient;
 
     public ZipCodeService(WebClient.Builder builder) {
-        webClient = builder.baseUrl("https://viacep.com.br/ws").build(); //url base de quem eu quero me comunicar
+        webClient = builder.baseUrl("https://viacep.com.br/ws").build();
     }
 
-    public Mono<ZipCodeResponse> findZipCodeByCep (String cep){
-        log.info("Looking for zip code {}", cep);
+    public Mono<ZipCodeResponse> findZipCodeByCep (String zipCode){
+        log.info("Looking for zip code {}", zipCode);
 
         return webClient
                 .get()
-                .uri("/{cep}/json/", cep)
+                .uri("/{zipCode}/json/", zipCode)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .onStatus(HttpStatus:: is4xxClientError,
-                        error -> Mono.error(new RuntimeException("Verify cep")))
+                        error -> Mono.error(new RuntimeException("Verify zipCode")))
                 .bodyToMono(ZipCodeResponse.class);
     }
 }

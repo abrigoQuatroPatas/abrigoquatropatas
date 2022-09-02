@@ -13,9 +13,9 @@ import reactor.core.publisher.Mono;
 public class ZipCodeController {
         private ZipCodeService zipCodeService;
 
-        @GetMapping("{cep}/json")
+        @GetMapping("{zipCode}/json")
         @ResponseStatus(HttpStatus.OK)
-        public Mono<ZipCodeResponse> getZipCodeByCep (@PathVariable String cep){
-            return zipCodeService.findZipCodeByCep(cep);
+        public Mono<ZipCodeResponse> getZipCodeByCep (@PathVariable String zipCode){
+            return zipCodeService.findZipCodeByCep(zipCode);
         }
 }

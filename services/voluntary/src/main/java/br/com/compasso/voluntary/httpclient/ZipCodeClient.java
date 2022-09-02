@@ -18,16 +18,16 @@ public class ZipCodeClient {
         webClient = builder.baseUrl("http://localhost:8096/webclient").build();
     }
 
-    public Mono<ZipCodeResponse> findAddressByVolunteeer(String cep){
-        log.info("Looking for zip code {}", cep);
+    public Mono<ZipCodeResponse> findAddressByVolunteeer(String zipCode){
+        log.info("Looking for zip code {}", zipCode);
 
         return webClient
                 .get()
-                .uri("/{cep}/json/", cep)
+                .uri("/{zipCode}/json/", zipCode)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .onStatus(HttpStatus:: is4xxClientError,
-                        error -> Mono.error(new RuntimeException("Verify cep")))
+                        error -> Mono.error(new RuntimeException("Verify zipCode")))
                 .bodyToMono(ZipCodeResponse.class);
     }
 }

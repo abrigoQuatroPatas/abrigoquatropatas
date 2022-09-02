@@ -1,5 +1,6 @@
 package br.com.compasso.pet.services;
 
+import br.com.compasso.pet.validations.Validations;
 import br.com.compasso.pet.dtos.request.PetRequestDto;
 import br.com.compasso.pet.dtos.response.PetResponseDto;
 import br.com.compasso.pet.entities.PetEntity;
@@ -29,12 +30,17 @@ public class PetService {
     @Autowired
     private ZipCodeClient zipCodeClient;
 
-    public PetResponseDto postPet(PetRequestDto petRequestDto) {
+    public PetResponseDto postPet(PetRequestDto petRequestDto){
         log.info("postPet() - START - Saving pet");
 
         PetEntity petEntity = modelMapper.map(petRequestDto, PetEntity.class);
 
-        String zipCode = petRequestDto.getRedemptionAddress().getZipCode();
+        String zipCode = petRequestDto.getRedemptionAddress().getZipCode()
+                .replaceAll("\\D", "" );
+
+        if (Validations.validateZipCode(zipCode)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,  "Invalid zipCode!");
+        }
 
         ZipCodeResponse zipCodeResponse = zipCodeClient.findRedemptionAddressByPet(zipCode).block();
 
@@ -42,6 +48,8 @@ public class PetService {
         petEntity.getRedemptionAddress().setCity(zipCodeResponse.getCity());
         petEntity.getRedemptionAddress().setDistrict(zipCodeResponse.getDistrict());
         petEntity.getRedemptionAddress().setStreet(zipCodeResponse.getStreet());
+
+        petEntity.getRedemptionAddress().setZipCode(zipCode.replaceAll("\\D", ""));
 
         PetEntity save = petRepository.save(petEntity);
 
