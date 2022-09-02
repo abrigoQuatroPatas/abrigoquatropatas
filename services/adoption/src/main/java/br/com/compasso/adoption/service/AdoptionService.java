@@ -9,6 +9,7 @@ import br.com.compasso.adoption.http.ConsumerClient;
 import br.com.compasso.adoption.http.PetClient;
 import br.com.compasso.adoption.repository.AdoptionRepository;
 import feign.FeignException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class AdoptionService {
 
     @Autowired
@@ -27,6 +29,8 @@ public class AdoptionService {
     private ConsumerClient consumerClient;
     @Autowired
     private PetClient petClient;
+    @Autowired
+    private RabbitService rabbitService;
 
     public ResponseAdoptionDto post(String idConsumer, String idPet) {
         ResponseConsumerDto consumer;
@@ -52,6 +56,10 @@ public class AdoptionService {
         consumerClient.putStatusConsumerInProgress(idConsumer);
 
         repository.save(adoption);
+
+        rabbitService.sendEmailToQueue(consumer);
+        log.info("sendEmailToQueue() - Send email for: {}", consumer.getName());
+
         return ResponseAdoptionDto.builder()
                 .id(adoption.getId())
                 .consumer(consumer)

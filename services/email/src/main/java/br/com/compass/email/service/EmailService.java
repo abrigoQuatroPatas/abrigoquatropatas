@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class EmailService {
 
     public void sendEmail(ResponseEmailDto emailDto) {
-        log.info("sendEmail() - start - sending email for {}, for email {}", emailDto.getNome(), emailDto.getEmail());
+        log.info("sendEmail() - start - sending email for {}, for email {}", emailDto.getName(), emailDto.getEmail());
     }
 
 }
