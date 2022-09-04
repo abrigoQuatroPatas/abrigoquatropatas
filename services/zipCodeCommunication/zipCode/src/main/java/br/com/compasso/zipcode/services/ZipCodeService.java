@@ -1,11 +1,13 @@
 package br.com.compasso.zipcode.services;
 
 import br.com.compasso.zipcode.responses.ZipCodeResponse;
+import br.com.compasso.zipcode.validations.Validations;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -19,6 +21,10 @@ public class ZipCodeService {
 
     public Mono<ZipCodeResponse> findZipCodeByCep (String zipCode){
         log.info("Looking for zip code {}", zipCode);
+
+        if (Validations.validateZipCode(zipCode)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,  "Invalid zipCode!");
+        }
 
         return webClient
                 .get()

@@ -2,6 +2,7 @@ package br.com.compasso.client.services;
 
 import br.com.compasso.client.dtos.request.RequestClientDto;
 import br.com.compasso.client.dtos.response.ResponseClientDto;
+import br.com.compasso.client.entitys.Address;
 import br.com.compasso.client.entitys.ClientEntity;
 import br.com.compasso.client.httpclient.ZipCodeClient;
 import br.com.compasso.client.repositorys.ClientRepository;
@@ -40,12 +41,18 @@ public class ClientService {
 
         ZipCodeResponse zipCodeResponse = zipCodeClient.findAddressByClient(zipCode).block();
 
-        clientEntity.getAddress().setState(zipCodeResponse.getState());
-        clientEntity.getAddress().setCity(zipCodeResponse.getCity());
-        clientEntity.getAddress().setDistrict(zipCodeResponse.getDistrict());
-        clientEntity.getAddress().setStreet(zipCodeResponse.getStreet());
+        Address address = Address.builder()
+                .state(zipCodeResponse.getState())
+                .city(zipCodeResponse.getCity())
+                .district(zipCodeResponse.getDistrict())
+                .street(zipCodeResponse.getStreet())
+                .number(client.getAddress().getNumber())
+                .build();
+
+        clientEntity.setAddress(address);
 
         clientEntity.getAddress().setZipCode(zipCode.replaceAll("\\D", ""));
+        clientEntity.setCpf(client.getCpf().replaceAll("\\D", ""));
 
         ClientEntity save = clientRepository.save(clientEntity);
         return modelMapper.map(save, ResponseClientDto.class);

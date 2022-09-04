@@ -1,15 +1,13 @@
 package br.com.compasso.client.entitys;
 
 import br.com.compasso.client.enums.StatusEnum;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
 
+@Builder
 @Document
 @Getter
 @Setter

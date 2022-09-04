@@ -1,10 +1,14 @@
 package br.com.compasso.client.entitys;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 
-@Data
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Address {
 
     @NotBlank

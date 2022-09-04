@@ -2,6 +2,7 @@ package br.com.compasso.ONG.service;
 
 import br.com.compasso.ONG.dto.request.RequestOngDto;
 import br.com.compasso.ONG.dto.response.ResponseOngDto;
+import br.com.compasso.ONG.entity.Address;
 import br.com.compasso.ONG.entity.OngEntity;
 import br.com.compasso.ONG.httpclient.ZipCodeClient;
 import br.com.compasso.ONG.repository.OngRepository;
@@ -38,12 +39,18 @@ public class OngService {
 
         ZipCodeResponse zipCodeResponse = zipCodeClient.findAddressByOng(zipCode).block();
 
-        ongEntity.getAddress().setState(zipCodeResponse.getState());
-        ongEntity.getAddress().setCity(zipCodeResponse.getCity());
-        ongEntity.getAddress().setDistrict(zipCodeResponse.getDistrict());
-        ongEntity.getAddress().setStreet(zipCodeResponse.getStreet());
+        Address address = Address.builder()
+                .state(zipCodeResponse.getState())
+                .city(zipCodeResponse.getCity())
+                .district(zipCodeResponse.getDistrict())
+                .street(zipCodeResponse.getStreet())
+                .number(ong.getAddress().getNumber())
+                .build();
 
+        ongEntity.setAddress(address);
         ongEntity.getAddress().setZipCode(zipCode.replaceAll("\\D", ""));
+
+        ongEntity.setCnpj(ong.getCnpj().replaceAll("\\D", ""));
 
         OngEntity save = ongRepository.save(ongEntity);
 

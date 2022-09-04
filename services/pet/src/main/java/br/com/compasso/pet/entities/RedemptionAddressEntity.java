@@ -1,8 +1,7 @@
 package br.com.compasso.pet.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 
 
@@ -10,6 +9,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class RedemptionAddressEntity {
 
     private String state;

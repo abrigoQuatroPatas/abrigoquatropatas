@@ -2,6 +2,7 @@ package br.com.compasso.voluntary.service;
 
 import br.com.compasso.voluntary.dto.request.RequestVoluntaryDto;
 import br.com.compasso.voluntary.dto.response.ResponseVoluntaryDto;
+import br.com.compasso.voluntary.entity.AddressEntity;
 import br.com.compasso.voluntary.entity.VoluntaryEntity;
 import br.com.compasso.voluntary.httpclient.ZipCodeClient;
 import br.com.compasso.voluntary.repository.VoluntaryRepository;
@@ -52,12 +53,18 @@ public class VoluntaryService {
 
         ZipCodeResponse zipCodeResponse = zipCodeClient.findAddressByVolunteeer(zipCode).block();
 
-        voluntaryEntity.getAddress().setState(zipCodeResponse.getState());
-        voluntaryEntity.getAddress().setCity(zipCodeResponse.getCity());
-        voluntaryEntity.getAddress().setDistrict(zipCodeResponse.getDistrict());
-        voluntaryEntity.getAddress().setStreet(zipCodeResponse.getStreet());
+        AddressEntity address = AddressEntity.builder()
+                .state(zipCodeResponse.getState())
+                .city(zipCodeResponse.getCity())
+                .district(zipCodeResponse.getDistrict())
+                .street(zipCodeResponse.getStreet())
+                .number(volunteer.getAddress().getNumber())
+                .build();
 
+        voluntaryEntity.setAddress(address);
         voluntaryEntity.getAddress().setZipCode(zipCode.replaceAll("\\D", ""));
+
+        voluntaryEntity.setCpf(volunteer.getCpf().replaceAll("\\D", ""));
 
         VoluntaryEntity save = repository.save(voluntaryEntity);
         return modelMapper.map(save, ResponseVoluntaryDto.class);

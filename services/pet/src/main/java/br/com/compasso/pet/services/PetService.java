@@ -1,5 +1,6 @@
 package br.com.compasso.pet.services;
 
+import br.com.compasso.pet.entities.RedemptionAddressEntity;
 import br.com.compasso.pet.validations.Validations;
 import br.com.compasso.pet.dtos.request.PetRequestDto;
 import br.com.compasso.pet.dtos.response.PetResponseDto;
@@ -44,11 +45,16 @@ public class PetService {
 
         ZipCodeResponse zipCodeResponse = zipCodeClient.findRedemptionAddressByPet(zipCode).block();
 
-        petEntity.getRedemptionAddress().setState(zipCodeResponse.getState());
-        petEntity.getRedemptionAddress().setCity(zipCodeResponse.getCity());
-        petEntity.getRedemptionAddress().setDistrict(zipCodeResponse.getDistrict());
-        petEntity.getRedemptionAddress().setStreet(zipCodeResponse.getStreet());
+        RedemptionAddressEntity redemptionAddress = RedemptionAddressEntity.builder()
+                .state(zipCodeResponse.getState())
+                .city(zipCodeResponse.getCity())
+                .district(zipCodeResponse.getDistrict())
+                .street(zipCodeResponse.getStreet())
+                .number(petRequestDto.getRedemptionAddress().getNumber())
+                .redemptionDate(petRequestDto.getRedemptionAddress().getRedemptionDate())
+                .build();
 
+        petEntity.setRedemptionAddress(redemptionAddress);
         petEntity.getRedemptionAddress().setZipCode(zipCode.replaceAll("\\D", ""));
 
         PetEntity save = petRepository.save(petEntity);
