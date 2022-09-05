@@ -31,4 +31,5 @@ public class RequestVoluntaryDto {
     private RequestAddressDto address;
     @NotNull(message = "Status field cannot be blank")
     private StatusEnum status;
+
 }

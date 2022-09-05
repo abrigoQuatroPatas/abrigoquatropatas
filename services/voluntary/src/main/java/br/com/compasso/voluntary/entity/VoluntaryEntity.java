@@ -25,5 +25,6 @@ public class VoluntaryEntity {
     private LocalDate birthDate;
     private AddressEntity address;
     private StatusEnum status;
+    private String ongId;
 
 }

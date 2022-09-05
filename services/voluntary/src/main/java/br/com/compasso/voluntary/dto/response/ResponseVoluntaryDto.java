@@ -3,11 +3,15 @@ package br.com.compasso.voluntary.dto.response;
 import br.com.compasso.voluntary.entity.AddressEntity;
 import br.com.compasso.voluntary.enums.StatusEnum;
 import br.com.compasso.voluntary.enums.TypeEnum;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ResponseVoluntaryDto {
 
     private String cpf;
@@ -16,4 +20,5 @@ public class ResponseVoluntaryDto {
     private LocalDate birthDate;
     private AddressEntity address;
     private StatusEnum status;
+    private ResponseOngDto ong;
 }

@@ -2,6 +2,7 @@ package br.com.compasso.ONG.controller;
 
 import br.com.compasso.ONG.dto.request.RequestOngDto;
 import br.com.compasso.ONG.dto.response.ResponseOngDto;
+import br.com.compasso.ONG.dto.response.ResponseOngVolunteersDto;
 import br.com.compasso.ONG.service.OngService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import javax.ws.rs.Path;
 import java.net.URI;
 
 @RestController
@@ -33,9 +35,15 @@ public class OngController {
         return ResponseEntity.ok(ongs);
     }
 
+    @GetMapping("/{cnpj}/voluntaries")
+    public ResponseEntity<ResponseOngVolunteersDto> getWithVoluntaries(@PathVariable String cnpj) {
+        ResponseOngVolunteersDto ong = service.getWithVoluntaries(cnpj);
+        return ResponseEntity.ok(ong);
+    }
+
     @GetMapping("/{cnpj}")
-    public ResponseEntity<ResponseOngDto> get(@PathVariable String cnpj) {
-        ResponseOngDto ong = service.get(cnpj);
+    public ResponseEntity<ResponseOngDto> getWithoutVoluntaries(@PathVariable String cnpj) {
+        ResponseOngDto ong = service.getWithoutVoluntaries(cnpj);
         return ResponseEntity.ok(ong);
     }
 
@@ -48,6 +56,18 @@ public class OngController {
     @DeleteMapping("/{cnpj}")
     public ResponseEntity<Void> delete(@PathVariable String cnpj) {
         service.delete(cnpj);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{cnpj}/voluntary/{cpf}")
+    public ResponseEntity<Void> deleteVoluntary(@PathVariable String cnpj, @PathVariable String cpf) {
+        service.deleteVoluntary(cnpj, cpf);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{cnpj}/voluntary/{cpf}")
+    public ResponseEntity<Void> putVoluntary(@PathVariable String cnpj, @PathVariable String cpf) {
+        service.updateVoluntary(cnpj, cpf);
         return ResponseEntity.noContent().build();
     }
 
