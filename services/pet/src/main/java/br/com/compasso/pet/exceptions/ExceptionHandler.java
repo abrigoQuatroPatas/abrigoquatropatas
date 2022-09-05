@@ -1,6 +1,5 @@
 package br.com.compasso.pet.exceptions;
 
-import br.com.compasso.pet.advices.GenericException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -8,7 +7,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,15 +35,6 @@ public class ExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @org.springframework.web.bind.annotation.ExceptionHandler(DateTimeParseException.class)
-    public Map<String, String> handleDateTimeException(DateTimeParseException ex) {
-        Map<String, String> errorMap = new HashMap<>();
-        errorMap.put("errorMessage", "Expected: dd/MM/yyyy HH:mm:ss, Received: " + ex.getParsedString());
-        log.error("handleDateTimeParseException() - " + errorMap.toString() + "  " + ex.getMessage());
-        return errorMap;
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @org.springframework.web.bind.annotation.ExceptionHandler(JsonMappingException.class)
     public Map<String, String> handleJsonMappingException(JsonMappingException ex) {
         Map<String, String> errorMap = new HashMap<>();
@@ -53,7 +42,5 @@ public class ExceptionHandler {
         log.error("handleJsonMappingException() - " + ex.getMessage() + "\n" + errorMap.toString());
         return errorMap;
     }
-
-
 
 }

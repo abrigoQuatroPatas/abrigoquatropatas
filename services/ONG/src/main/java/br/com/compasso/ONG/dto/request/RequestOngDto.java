@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.br.CNPJ;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
@@ -25,6 +26,7 @@ public class RequestOngDto {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate foundationDate;
     @NotNull
+    @Valid
     private RequestAddressDto address;
     @NotNull
     @PositiveOrZero

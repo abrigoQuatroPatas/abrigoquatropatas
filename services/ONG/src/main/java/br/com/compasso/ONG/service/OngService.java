@@ -2,8 +2,12 @@ package br.com.compasso.ONG.service;
 
 import br.com.compasso.ONG.dto.request.RequestOngDto;
 import br.com.compasso.ONG.dto.response.ResponseOngDto;
+import br.com.compasso.ONG.entity.Address;
 import br.com.compasso.ONG.entity.OngEntity;
+import br.com.compasso.ONG.httpclient.ZipCodeClient;
 import br.com.compasso.ONG.repository.OngRepository;
+import br.com.compasso.ONG.response.ZipCodeResponse;
+import br.com.compasso.ONG.validations.Validations;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,13 +23,37 @@ public class OngService {
     private OngRepository ongRepository;
     @Autowired
     private ModelMapper modelMapper;
-
+    @Autowired
+    private ZipCodeClient zipCodeClient;
     public ResponseOngDto post(RequestOngDto ong) {
         OngEntity ongEntity = modelMapper.map(ong, OngEntity.class);
         if (ongRepository.existsById(ong.getCnpj())) {
             throw new ResponseStatusException(HttpStatus.OK);
         }
+
+        String zipCode = ong.getAddress().getZipCode().replaceAll("\\D", "" );
+
+        if (Validations.validateZipCode(zipCode)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,  "Invalid zipCode!");
+        }
+
+        ZipCodeResponse zipCodeResponse = zipCodeClient.findAddressByOng(zipCode).block();
+
+        Address address = Address.builder()
+                .state(zipCodeResponse.getState())
+                .city(zipCodeResponse.getCity())
+                .district(zipCodeResponse.getDistrict())
+                .street(zipCodeResponse.getStreet())
+                .number(ong.getAddress().getNumber())
+                .build();
+
+        ongEntity.setAddress(address);
+        ongEntity.getAddress().setZipCode(zipCode.replaceAll("\\D", ""));
+
+        ongEntity.setCnpj(ong.getCnpj().replaceAll("\\D", ""));
+
         OngEntity save = ongRepository.save(ongEntity);
+
         return modelMapper.map(save, ResponseOngDto.class);
     }
 

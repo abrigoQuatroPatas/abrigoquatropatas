@@ -3,6 +3,11 @@ package br.com.compasso.voluntary.entity;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Data
 public class AddressEntity {
 

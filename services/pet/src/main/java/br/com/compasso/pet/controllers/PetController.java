@@ -19,7 +19,7 @@ import java.net.URI;
 @RequestMapping("/pet/")
 public class PetController {
 
-        @Autowired
+    @Autowired
         private PetService petService;
 
         @PostMapping

@@ -1,4 +1,4 @@
-package br.com.compasso.pet.advices;
+package br.com.compasso.pet.exceptions;
 
 public class GenericException extends Exception {
 

@@ -1,9 +1,14 @@
 package br.com.compasso.pet.services;
 
+import br.com.compasso.pet.entities.RedemptionAddressEntity;
+import br.com.compasso.pet.validations.Validations;
 import br.com.compasso.pet.dtos.request.PetRequestDto;
 import br.com.compasso.pet.dtos.response.PetResponseDto;
 import br.com.compasso.pet.entities.PetEntity;
+import br.com.compasso.pet.httpclient.ZipCodeClient;
 import br.com.compasso.pet.repositories.PetRepository;
+
+import br.com.compasso.pet.response.ZipCodeResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +28,35 @@ public class PetService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public PetResponseDto postPet(PetRequestDto petRequestDto) {
+    @Autowired
+    private ZipCodeClient zipCodeClient;
+
+    public PetResponseDto postPet(PetRequestDto petRequestDto){
         log.info("postPet() - START - Saving pet");
 
         PetEntity petEntity = modelMapper.map(petRequestDto, PetEntity.class);
+
+        String zipCode = petRequestDto.getRedemptionAddress().getZipCode()
+                .replaceAll("\\D", "" );
+
+        if (Validations.validateZipCode(zipCode)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,  "Invalid zipCode!");
+        }
+
+        ZipCodeResponse zipCodeResponse = zipCodeClient.findRedemptionAddressByPet(zipCode).block();
+
+        RedemptionAddressEntity redemptionAddress = RedemptionAddressEntity.builder()
+                .state(zipCodeResponse.getState())
+                .city(zipCodeResponse.getCity())
+                .district(zipCodeResponse.getDistrict())
+                .street(zipCodeResponse.getStreet())
+                .number(petRequestDto.getRedemptionAddress().getNumber())
+                .redemptionDate(petRequestDto.getRedemptionAddress().getRedemptionDate())
+                .build();
+
+        petEntity.setRedemptionAddress(redemptionAddress);
+        petEntity.getRedemptionAddress().setZipCode(zipCode.replaceAll("\\D", ""));
+
         PetEntity save = petRepository.save(petEntity);
 
         log.info("postPet() - END - Pet saved");
