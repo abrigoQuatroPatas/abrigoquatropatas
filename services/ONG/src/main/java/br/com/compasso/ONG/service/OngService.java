@@ -52,4 +52,21 @@ public class OngService {
                 new ResponseStatusException(HttpStatus.NOT_FOUND));
         ongRepository.delete(ongEntity);
     }
+
+    public void updateAmountLess(String cnpj, String type) {
+        OngEntity ongEntity = ongRepository.findById(cnpj).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if (type.equals("dog")) {
+            int amount = ongEntity.getAmountDog() - 1;
+            ongEntity.setAmountDog(amount);
+            ongRepository.save(ongEntity);
+        }
+
+        if (type.equals("cat")) {
+            int amount = ongEntity.getAmountCat() - 1;
+            ongEntity.setAmountCat(amount);
+            ongRepository.save(ongEntity);
+        }
+    }
 }

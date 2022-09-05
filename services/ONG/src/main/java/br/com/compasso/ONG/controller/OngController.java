@@ -40,8 +40,14 @@ public class OngController {
     }
 
     @PutMapping("/{cnpj}")
-    public ResponseEntity<Void> put(@PathVariable String cnpj, @RequestBody @Valid RequestOngDto ong) {
+    public ResponseEntity<Void> put(@PathVariable String cnpj, @RequestBody RequestOngDto ong) {
         service.update(cnpj, ong);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{cnpj}/pet/{type}")
+    public ResponseEntity<Void> putAmountLess(@PathVariable String cnpj, @PathVariable String type) {
+        service.updateAmountLess(cnpj, type);
         return ResponseEntity.noContent().build();
     }
 

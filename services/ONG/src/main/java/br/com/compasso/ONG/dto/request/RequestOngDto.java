@@ -9,7 +9,7 @@ import org.hibernate.validator.constraints.br.CNPJ;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
 
 @Data
@@ -27,10 +27,10 @@ public class RequestOngDto {
     @NotNull
     private RequestAddressDto address;
     @NotNull
-    @Positive
+    @PositiveOrZero
     private Integer amountCat;
     @NotNull
-    @Positive
+    @PositiveOrZero
     private Integer amountDog;
 
 }

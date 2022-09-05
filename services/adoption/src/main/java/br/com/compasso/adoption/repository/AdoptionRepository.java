@@ -8,5 +8,4 @@ import org.springframework.stereotype.Repository;
 public interface AdoptionRepository extends JpaRepository<AdoptionEntity, Long> {
 
     boolean existsByPetId(String id);
-    boolean existsByConsumerId(String id);
 }

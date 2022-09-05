@@ -6,6 +6,7 @@ import br.com.compasso.adoption.dto.response.ResponsePetDto;
 import br.com.compasso.adoption.entity.AdoptionEntity;
 import br.com.compasso.adoption.exception.MessageFeignException;
 import br.com.compasso.adoption.http.ConsumerClient;
+import br.com.compasso.adoption.http.OngClient;
 import br.com.compasso.adoption.http.PetClient;
 import br.com.compasso.adoption.repository.AdoptionRepository;
 import feign.FeignException;
@@ -32,6 +33,9 @@ public class AdoptionService {
     @Autowired
     private RabbitService rabbitService;
 
+    @Autowired
+    private OngClient ongClient;
+
     public ResponseAdoptionDto post(String idConsumer, String idPet) {
         ResponseConsumerDto consumer;
         ResponsePetDto pet;
@@ -50,9 +54,9 @@ public class AdoptionService {
         if (repository.existsByPetId(pet.getId())) {
             throw new ResponseStatusException(HttpStatus.OK);
         }
-        if (repository.existsByConsumerId(consumer.getCpf())) {
-            throw new ResponseStatusException(HttpStatus.OK);
-        }
+
+        ongClient.putAmountPet(pet.getOngId(), pet.getType().toLowerCase());
+
         consumerClient.putStatusConsumerInProgress(idConsumer);
 
         repository.save(adoption);
