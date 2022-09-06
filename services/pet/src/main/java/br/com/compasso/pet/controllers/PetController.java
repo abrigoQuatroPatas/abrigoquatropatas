@@ -16,17 +16,17 @@ import java.net.URI;
 
 @Slf4j
 @RestController
-@RequestMapping("/pet/")
+@RequestMapping("/pet")
 public class PetController {
 
     @Autowired
         private PetService petService;
 
-        @PostMapping
-        public ResponseEntity<PetResponseDto> postPet(@RequestBody @Valid PetRequestDto pet, UriComponentsBuilder component) {
+        @PostMapping("/ong/{cnpj}")
+        public ResponseEntity<PetResponseDto> postPet(@RequestBody @Valid PetRequestDto pet, UriComponentsBuilder component, @PathVariable String cnpj) {
             log.info("postPet() - START - Calling the service");
-            PetResponseDto petRegistered = petService.postPet(pet);
-            URI uri = component.path("/pet/{id}").buildAndExpand(petRegistered.getId()).toUri();
+            PetResponseDto petRegistered = petService.postPet(pet, cnpj);
+            URI uri = component.path("/pet/{id}/ong/{cnpj}").buildAndExpand(petRegistered.getId(), cnpj).toUri();
             return ResponseEntity.created(uri).body(petRegistered);
         }
 

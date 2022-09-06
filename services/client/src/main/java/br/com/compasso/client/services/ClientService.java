@@ -13,9 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+
 @Service
 public class ClientService {
-
     @Autowired
     private ModelMapper modelMapper;
     @Autowired
@@ -81,4 +81,5 @@ public class ClientService {
                 new ResponseStatusException(HttpStatus.NOT_FOUND));
         clientRepository.delete(clientEntity);
     }
+
 }

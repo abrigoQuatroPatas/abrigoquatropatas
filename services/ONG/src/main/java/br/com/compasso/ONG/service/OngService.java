@@ -98,20 +98,34 @@ public class OngService {
         ongRepository.delete(ongEntity);
     }
 
-    public void updateAmountLess(String cnpj, String type) {
-        OngEntity ongEntity = ongRepository.findById(cnpj).orElseThrow(() ->
+    public void putAmount(String cnpj, String type) {
+        OngEntity ong = ongRepository.findById(cnpj).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        if (type.equals("dog")) {
-            int amount = ongEntity.getAmountDog() - 1;
-            ongEntity.setAmountDog(amount);
-            ongRepository.save(ongEntity);
+        if(type.equals("dog")) {
+            Integer amountDog = ong.getAmountDog();
+            ong.setAmountDog(amountDog + 1);
+            ongRepository.save(ong);
+        } else if (type.equals("cat")) {
+            Integer amountCat = ong.getAmountCat();
+            ong.setAmountCat(amountCat + 1);
+            ongRepository.save(ong);
         }
+    }
 
-        if (type.equals("cat")) {
-            int amount = ongEntity.getAmountCat() - 1;
-            ongEntity.setAmountCat(amount);
-            ongRepository.save(ongEntity);
+    public void deleteAmount(String cnpj, String type) {
+        OngEntity ong = ongRepository.findById(cnpj).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if(type.equals("dog")) {
+            Integer amountDog = ong.getAmountDog();
+            ong.setAmountDog(amountDog - 1);
+            ongRepository.save(ong);
+
+        } else if (type.equals("cat")) {
+            Integer amountCat = ong.getAmountCat();
+            ong.setAmountCat(amountCat - 1);
+            ongRepository.save(ong);
         }
     }
 
