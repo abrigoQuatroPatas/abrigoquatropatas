@@ -15,3 +15,14 @@ spring:
     username: guest
     password: guest
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: abrigo.quatro.patas@gmail.com
+    password: lydlqdyufupmmuai
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
