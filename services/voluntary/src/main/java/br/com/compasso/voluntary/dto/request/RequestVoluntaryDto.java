@@ -36,4 +36,5 @@ public class RequestVoluntaryDto {
 
     @NotNull(message = "Status field cannot be blank")
     private StatusEnum status;
+
 }

@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.net.URI;
+import java.util.List;
 
 @RestController
-@RequestMapping("/volunteer")
+@RequestMapping("/voluntary")
 public class VoluntaryController {
 
     @Autowired
@@ -35,7 +37,7 @@ public class VoluntaryController {
     @PostMapping
     public ResponseEntity<ResponseVoluntaryDto> post(@RequestBody @Valid RequestVoluntaryDto volunteer, UriComponentsBuilder componentsBuilder) {
         ResponseVoluntaryDto volunteerDto = service.post(volunteer);
-        URI uri = componentsBuilder.path("/volunteer/{cpf}").buildAndExpand(volunteerDto.getCpf()).toUri();
+        URI uri = componentsBuilder.path("/voluntary/{cpf}").buildAndExpand(volunteerDto.getCpf()).toUri();
         return ResponseEntity.created(uri).body(volunteerDto);
     }
 
@@ -49,6 +51,18 @@ public class VoluntaryController {
     public ResponseEntity<Void> delete(@PathVariable String cpf) {
         service.delete(cpf);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{cpf}/ong/{cnpj}")
+    public ResponseEntity<Void> addVoluntary(@PathVariable @NotNull String cpf, @PathVariable String cnpj) {
+        service.addVoluntary(cpf,cnpj);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/ong/{cnpj}")
+    public ResponseEntity<List<ResponseVoluntaryDto>> getOngId(@PathVariable String cnpj) {
+        List<ResponseVoluntaryDto> volunteer = service.getByOngId(cnpj);
+        return ResponseEntity.ok(volunteer);
     }
 
 }

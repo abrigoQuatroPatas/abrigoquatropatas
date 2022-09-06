@@ -4,9 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
-public class ResponseOngDto {
+public class ResponseOngVolunteersDto {
 
     private String Cnpj;
     private String name;
@@ -15,5 +16,5 @@ public class ResponseOngDto {
     private ResponseAddressDto address;
     private Integer amountCat;
     private Integer amountDog;
-
+    private List<ResponseVoluntaryDto> voluntaries;
 }
