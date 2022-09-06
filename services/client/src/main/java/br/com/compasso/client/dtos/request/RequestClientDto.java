@@ -1,6 +1,5 @@
 package br.com.compasso.client.dtos.request;
 
-import br.com.compasso.client.enums.StatusEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +10,6 @@ import org.hibernate.validator.constraints.br.CPF;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data
@@ -30,6 +28,4 @@ public class RequestClientDto {
     private RequestAddressDto address;
     @Email
     private String email;
-    @NotNull
-    private StatusEnum statusEnum;
 }

@@ -2,6 +2,7 @@ package br.com.compasso.adoption.service;
 
 import br.com.compasso.adoption.dto.response.ResponseAdoptionDto;
 import br.com.compasso.adoption.dto.response.ResponseConsumerDto;
+import br.com.compasso.adoption.dto.response.ResponseOngDto;
 import br.com.compasso.adoption.dto.response.ResponsePetDto;
 import br.com.compasso.adoption.entity.AdoptionEntity;
 import br.com.compasso.adoption.exception.MessageFeignException;
@@ -39,9 +40,12 @@ public class AdoptionService {
     public ResponseAdoptionDto post(String idConsumer, String idPet) {
         ResponseConsumerDto consumer;
         ResponsePetDto pet;
+        ResponseOngDto ong;
         try {
             consumer = consumerClient.getConsumer(idConsumer);
             pet = petClient.getPet(idPet);
+            ong = ongClient.getOng(pet.getOng().getCnpj());
+            pet.setOng(ong);
         } catch (FeignException e) {
             throw new MessageFeignException(String.valueOf(e.status()), e.contentUTF8());
         }
@@ -55,7 +59,7 @@ public class AdoptionService {
             throw new ResponseStatusException(HttpStatus.OK);
         }
 
-        ongClient.putAmountPet(pet.getOngId(), pet.getType().toLowerCase());
+        ongClient.putAmountPet(pet.getOng().getCnpj(), pet.getType().toLowerCase());
 
         consumerClient.putStatusConsumerInProgress(idConsumer);
 
@@ -79,6 +83,8 @@ public class AdoptionService {
             all.forEach(adoption -> {
                ResponseConsumerDto consumer = consumerClient.getConsumer(adoption.getConsumerId());
                ResponsePetDto pet = petClient.getPet(adoption.getPetId());
+               ResponseOngDto ong = ongClient.getOng(pet.getOng().getCnpj());
+               pet.setOng(ong);
 
                 ResponseAdoptionDto build = ResponseAdoptionDto.builder()
                         .id(adoption.getId())
@@ -107,6 +113,8 @@ public class AdoptionService {
                 new ResponseStatusException(HttpStatus.NOT_FOUND));
         ResponseConsumerDto consumer = consumerClient.getConsumer(adoption.getConsumerId());
         ResponsePetDto pet = petClient.getPet(adoption.getPetId());
+        ResponseOngDto ong = ongClient.getOng(pet.getOng().getCnpj());
+        pet.setOng(ong);
 
         return ResponseAdoptionDto.builder()
                 .id(adoption.getId())
