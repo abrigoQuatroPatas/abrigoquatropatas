@@ -14,4 +14,7 @@ public interface OngClient {
 
     @RequestMapping(method = RequestMethod.GET, value = "/ong/{cnpj}")
     ResponseOngDto getOng(@PathVariable String cnpj);
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/ong/{cnpj}/amount/{type}")
+    void putAmountPetPlus(@PathVariable String cnpj, @PathVariable String type);
 }

@@ -128,6 +128,8 @@ public class AdoptionService {
         AdoptionEntity adoption = repository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND));
         consumerClient.putStatusConsumerNull(adoption.getConsumerId());
+        ResponsePetDto pet = petClient.getPet(adoption.getPetId());
+        ongClient.putAmountPetPlus(pet.getOng().getCnpj(), pet.getType().toLowerCase());
         repository.delete(adoption);
     }
 }

@@ -4,18 +4,6 @@ server:
 spring:
   application:
     name: abrigo-quatro-patas-ms
-  datasource:
-    url: jdbc:mysql://localhost:3306/abrigo_quatro_patas?useTimezone=true&serverTimezone=America/Sao_Paulo&createDatabaseIfNotExist=true
-    username: root
-    password: 12345678
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    show-sql: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
   cloud:
     gateway:
       discovery:
@@ -27,3 +15,19 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka
+
+springdoc:
+  version: "@springdoc.version@"
+  swagger-ui:
+    use-root-path: true
+    urls:
+      - name: adoption
+        url: adoption-ms/v3/api-docs
+      - name: client
+        url: client-ms/v3/api-docs
+      - name: ong
+        url: ong-ms/v3/api-docs
+      - name: pet
+        url: pet-ms/v3/api-docs
+      - name: voluntary
+        url: voluntary-ms/v3/api-docs

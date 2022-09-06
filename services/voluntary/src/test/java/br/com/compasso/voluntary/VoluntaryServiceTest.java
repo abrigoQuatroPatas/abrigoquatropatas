@@ -3,8 +3,8 @@ package br.com.compasso.voluntary;
 import br.com.compasso.voluntary.dto.request.RequestAddressDto;
 import br.com.compasso.voluntary.dto.request.RequestVoluntaryDto;
 import br.com.compasso.voluntary.entity.VoluntaryEntity;
-import br.com.compasso.voluntary.enums.StatusEnum;
-import br.com.compasso.voluntary.enums.TypeEnum;
+import br.com.compasso.voluntary.enums.Status;
+import br.com.compasso.voluntary.enums.Type;
 import br.com.compasso.voluntary.repository.VoluntaryRepository;
 import br.com.compasso.voluntary.service.VoluntaryService;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,10 +48,10 @@ public class VoluntaryServiceTest {
         this.voluntaryDto = RequestVoluntaryDto.builder()
                 .cpf("67351300062")
                 .name("cpf teste")
-                .type(TypeEnum.HELPER)
+                .type(Type.HELPER)
                 .birthDate(LocalDate.now())
                 .address(addressDto)
-                .status(StatusEnum.AVAILABLE)
+                .status(Status.AVAILABLE)
                 .build();
     }
 

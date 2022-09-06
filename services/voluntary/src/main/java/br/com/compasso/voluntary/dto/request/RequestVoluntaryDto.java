@@ -1,7 +1,7 @@
 package br.com.compasso.voluntary.dto.request;
 
-import br.com.compasso.voluntary.enums.StatusEnum;
-import br.com.compasso.voluntary.enums.TypeEnum;
+import br.com.compasso.voluntary.enums.Status;
+import br.com.compasso.voluntary.enums.Type;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,7 +25,7 @@ public class RequestVoluntaryDto {
     private String name;
 
     @NotNull(message = "Type field cannot be blank")
-    private TypeEnum type;
+    private Type type;
 
     @JsonFormat(pattern="dd/MM/yyyy")
     @NotNull(message = "BirthDate field cannot be null")
@@ -35,6 +35,6 @@ public class RequestVoluntaryDto {
     private RequestAddressDto address;
 
     @NotNull(message = "Status field cannot be blank")
-    private StatusEnum status;
+    private Status status;
 
 }

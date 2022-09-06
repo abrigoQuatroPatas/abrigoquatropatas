@@ -13,8 +13,8 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MensagemErro {
 
-    private String mensagem;
     private String status;
+    private String mensagem;
 
     public MensagemErro(String mensagem) {
         this.mensagem = mensagem;
