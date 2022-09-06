@@ -2,9 +2,13 @@ package br.com.compasso.client.services;
 
 import br.com.compasso.client.dtos.request.RequestClientDto;
 import br.com.compasso.client.dtos.response.ResponseClientDto;
+import br.com.compasso.client.entitys.Address;
 import br.com.compasso.client.entitys.ClientEntity;
 import br.com.compasso.client.enums.StatusEnum;
+import br.com.compasso.client.httpclient.ZipCodeClient;
 import br.com.compasso.client.repositorys.ClientRepository;
+import br.com.compasso.client.response.ZipCodeResponse;
+import br.com.compasso.client.validations.Validations;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,11 +25,37 @@ public class ClientService {
     @Autowired
     private ClientRepository clientRepository;
 
+    @Autowired
+    private ZipCodeClient zipCodeClient;
+
     public ResponseClientDto post(RequestClientDto client) {
         ClientEntity clientEntity = modelMapper.map(client, ClientEntity.class);
         if (clientRepository.existsById(clientEntity.getCpf())) {
             throw new ResponseStatusException(HttpStatus.OK);
         }
+
+        String zipCode = client.getAddress().getZipCode()
+                .replaceAll("\\D", "" );
+
+        if (Validations.validateZipCode(zipCode)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,  "Invalid zipCode!");
+        }
+
+        ZipCodeResponse zipCodeResponse = zipCodeClient.findAddressByClient(zipCode).block();
+
+        Address address = Address.builder()
+                .state(zipCodeResponse.getState())
+                .city(zipCodeResponse.getCity())
+                .district(zipCodeResponse.getDistrict())
+                .street(zipCodeResponse.getStreet())
+                .number(client.getAddress().getNumber())
+                .build();
+
+        clientEntity.setAddress(address);
+        clientEntity.getAddress().setZipCode(zipCode.replaceAll("\\D", ""));
+
+        clientEntity.setCpf(client.getCpf().replaceAll("\\D", ""));
+
         ClientEntity save = clientRepository.save(clientEntity);
         return modelMapper.map(save, ResponseClientDto.class);
     }
