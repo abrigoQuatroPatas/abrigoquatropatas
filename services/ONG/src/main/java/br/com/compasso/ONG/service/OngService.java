@@ -59,11 +59,27 @@ public class OngService {
 
         if(type.equals("dog")) {
             Integer amountDog = ong.getAmountDog();
-            ong.setAmountDog(amountDog +1);
+            ong.setAmountDog(amountDog + 1);
             ongRepository.save(ong);
         } else if (type.equals("cat")) {
             Integer amountCat = ong.getAmountCat();
-            ong.setAmountCat(amountCat +1);
+            ong.setAmountCat(amountCat + 1);
+            ongRepository.save(ong);
+        }
+    }
+
+    public void deleteAmount(String cnpj, String type) {
+        OngEntity ong = ongRepository.findById(cnpj).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if(type.equals("dog")) {
+            Integer amountDog = ong.getAmountDog();
+            ong.setAmountDog(amountDog - 1);
+            ongRepository.save(ong);
+
+        } else if (type.equals("cat")) {
+            Integer amountCat = ong.getAmountCat();
+            ong.setAmountCat(amountCat - 1);
             ongRepository.save(ong);
         }
     }

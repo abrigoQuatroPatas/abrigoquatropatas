@@ -30,4 +30,6 @@ public class PetEntity {
     private LocalDate arrivalDate;
 
     private RedemptionAddressEntity redemptionAddress;
+
+    private String ongId;
 }

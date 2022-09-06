@@ -7,12 +7,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="client" />
-        <module name="abrigoQuatroPatas" />
         <module name="ONG" />
+        <module name="client" />
         <module name="voluntary" />
-        <module name="eureka" />
+        <module name="abrigoQuatroPatas" />
         <module name="pet" />
+        <module name="eureka" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

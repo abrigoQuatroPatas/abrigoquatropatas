@@ -20,7 +20,6 @@ public class OngController {
     @Autowired
     private OngService service;
 
-
     @PostMapping
     public ResponseEntity<ResponseOngDto> post(@RequestBody @Valid RequestOngDto ong, UriComponentsBuilder component) {
         ResponseOngDto ongCadastrada = service.post(ong);
@@ -46,7 +45,7 @@ public class OngController {
         return ResponseEntity.noContent().build();
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/ong/{cnpj}/amount/{type}")
+    @PutMapping("/{cnpj}/amount/{type}")
     public ResponseEntity<Void> putAmount(@PathVariable String cnpj, @PathVariable String type) {
         service.putAmount(cnpj, type);
         return ResponseEntity.noContent().build();
@@ -58,4 +57,9 @@ public class OngController {
         return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping("/{cnpj}/amount/{type}")
+    public ResponseEntity<Void> deleteAmount(@PathVariable String cnpj, @PathVariable String type) {
+        service.deleteAmount(cnpj, type);
+        return ResponseEntity.noContent().build();
+    }
 }

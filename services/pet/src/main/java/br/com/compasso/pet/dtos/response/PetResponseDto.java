@@ -1,14 +1,16 @@
 package br.com.compasso.pet.dtos.response;
 
 import br.com.compasso.pet.enums.TypeEnum;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class PetResponseDto {
 
     private String id;
@@ -20,4 +22,6 @@ public class PetResponseDto {
     private LocalDate arrivalDate;
 
     private RedemptionAddressResponseDto redemptionAddress;
+
+    private ResponseOngDto ong;
 }

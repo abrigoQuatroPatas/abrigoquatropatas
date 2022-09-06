@@ -4,6 +4,7 @@ import br.com.compasso.pet.advices.GenericException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -54,6 +55,12 @@ public class ExceptionHandler {
         return errorMap;
     }
 
-
-
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @org.springframework.web.bind.annotation.ExceptionHandler(MessageFeignException.class)
+    public Map<String, String> handleFeignException(MessageFeignException ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("errorMessage", ex.getMessage());
+        log.error("handleFeignException() - " + ex.getMessage() + "\n" + errorMap.toString());
+        return errorMap;
+    }
 }
