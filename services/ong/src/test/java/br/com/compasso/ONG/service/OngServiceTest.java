@@ -12,14 +12,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 class OngServiceTest {
@@ -69,14 +66,14 @@ class OngServiceTest {
     void get() {
         Mockito.when(repository.findById("45984180000121")).thenReturn(Optional.ofNullable(this.ongEntity));
 
-        service.get("45984180000121");
+        service.getWithoutVoluntaries("45984180000121");
         Mockito.verify(repository).findById(this.ongDto.getCnpj());
     }
 
     @Test
     void getException() {
         Mockito.when(repository.findById("45984180000121")).thenReturn(Optional.ofNullable(this.ongEntity));
-        Assertions.assertThrows(ResponseStatusException.class,() -> service.get("4261228904"));
+        Assertions.assertThrows(ResponseStatusException.class,() -> service.getWithoutVoluntaries("4261228904"));
     }
 
     @Test
