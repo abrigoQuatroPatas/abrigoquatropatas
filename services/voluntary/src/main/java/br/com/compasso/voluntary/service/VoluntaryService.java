@@ -1,6 +1,7 @@
 package br.com.compasso.voluntary.service;
 
 import br.com.compasso.voluntary.dto.request.RequestVoluntaryDto;
+import br.com.compasso.voluntary.dto.request.RequestVoluntaryPutDto;
 import br.com.compasso.voluntary.dto.response.ResponseOngDto;
 import br.com.compasso.voluntary.dto.response.ResponseVoluntaryDto;
 import br.com.compasso.voluntary.entity.AddressEntity;
@@ -96,7 +97,7 @@ public class VoluntaryService {
         return modelMapper.map(save, ResponseVoluntaryDto.class);
     }
 
-    public void update(String cpf, RequestVoluntaryDto volunteer) {
+    public void update(String cpf, RequestVoluntaryPutDto volunteer) {
         VoluntaryEntity voluntaryEntity = repository.findById(cpf).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         modelMapper.map(volunteer, voluntaryEntity);
         repository.save(voluntaryEntity);

@@ -1,6 +1,7 @@
 package br.com.compasso.voluntary.controller;
 
 import br.com.compasso.voluntary.dto.request.RequestVoluntaryDto;
+import br.com.compasso.voluntary.dto.request.RequestVoluntaryPutDto;
 import br.com.compasso.voluntary.dto.response.ResponseVoluntaryDto;
 import br.com.compasso.voluntary.service.VoluntaryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,26 +25,26 @@ public class VoluntaryController {
 
     @GetMapping
     public ResponseEntity<Page<ResponseVoluntaryDto>> getAll(Pageable pageable) {
-        Page<ResponseVoluntaryDto> volunteers = service.getAll(pageable);
-        return ResponseEntity.ok(volunteers);
+        Page<ResponseVoluntaryDto> voluntaries = service.getAll(pageable);
+        return ResponseEntity.ok(voluntaries);
     }
 
     @GetMapping("/{cpf}")
     public ResponseEntity<ResponseVoluntaryDto> get(@PathVariable String cpf) {
-        ResponseVoluntaryDto volunteer = service.get(cpf);
-        return ResponseEntity.ok(volunteer);
+        ResponseVoluntaryDto voluntary = service.get(cpf);
+        return ResponseEntity.ok(voluntary);
     }
 
     @PostMapping
-    public ResponseEntity<ResponseVoluntaryDto> post(@RequestBody @Valid RequestVoluntaryDto volunteer, UriComponentsBuilder componentsBuilder) {
-        ResponseVoluntaryDto volunteerDto = service.post(volunteer);
-        URI uri = componentsBuilder.path("/voluntary/{cpf}").buildAndExpand(volunteerDto.getCpf()).toUri();
-        return ResponseEntity.created(uri).body(volunteerDto);
+    public ResponseEntity<ResponseVoluntaryDto> post(@RequestBody @Valid RequestVoluntaryDto voluntary, UriComponentsBuilder componentsBuilder) {
+        ResponseVoluntaryDto voluntaryDto = service.post(voluntary);
+        URI uri = componentsBuilder.path("/voluntary/{cpf}").buildAndExpand(voluntaryDto.getCpf()).toUri();
+        return ResponseEntity.created(uri).body(voluntaryDto);
     }
 
     @PutMapping("/{cpf}")
-    public ResponseEntity<Void> put(@PathVariable String cpf, @RequestBody @Valid RequestVoluntaryDto volunteer) {
-        service.update(cpf, volunteer);
+    public ResponseEntity<Void> put(@PathVariable String cpf, @RequestBody @Valid RequestVoluntaryPutDto voluntary) {
+        service.update(cpf, voluntary);
         return ResponseEntity.noContent().build();
     }
 
@@ -61,8 +62,8 @@ public class VoluntaryController {
 
     @GetMapping("/ong/{cnpj}")
     public ResponseEntity<List<ResponseVoluntaryDto>> getOngId(@PathVariable String cnpj) {
-        List<ResponseVoluntaryDto> volunteer = service.getByOngId(cnpj);
-        return ResponseEntity.ok(volunteer);
+        List<ResponseVoluntaryDto> voluntary = service.getByOngId(cnpj);
+        return ResponseEntity.ok(voluntary);
     }
 
 }

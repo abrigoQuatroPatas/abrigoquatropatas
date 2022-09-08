@@ -20,5 +20,6 @@ public class ResponseVoluntaryDto {
     private LocalDate birthDate;
     private AddressEntity address;
     private StatusEnum status;
+    private String ongId;
     private ResponseOngDto ong;
 }
