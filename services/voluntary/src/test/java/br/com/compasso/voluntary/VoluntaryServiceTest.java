@@ -2,6 +2,7 @@ package br.com.compasso.voluntary;
 
 import br.com.compasso.voluntary.dto.request.RequestAddressDto;
 import br.com.compasso.voluntary.dto.request.RequestVoluntaryDto;
+import br.com.compasso.voluntary.dto.request.RequestVoluntaryPutDto;
 import br.com.compasso.voluntary.entity.VoluntaryEntity;
 import br.com.compasso.voluntary.enums.StatusEnum;
 import br.com.compasso.voluntary.enums.TypeEnum;
@@ -30,23 +31,23 @@ public class VoluntaryServiceTest {
     private ModelMapper modelMapper;
     private VoluntaryEntity entity;
     private RequestVoluntaryDto voluntaryDto;
+    private RequestVoluntaryPutDto voluntaryPutDto;
 
     @BeforeEach
     public void setUp() {
         this.entity = new VoluntaryEntity();
-        this.entity.setCpf("67351300062");
+        this.entity.setCpf("88689769196");
 
         RequestAddressDto addressDto = RequestAddressDto.builder()
-                .zipCode("93218-150")
-                .street("Rua Doutor Otávio Azambuja")
-                .city("Sapucaia do Sul")
-                .state("RS")
-                .number("21")
-                .district("Freitas")
+                .zipCode("24716-012")
+                .street("Rua Expedicionário Antenor Costa")
+                .city("São Gonçalo")
+                .state("RJ")
+                .number("194")
+                .district("Jardim Catarina")
                 .build();
 
-        this.voluntaryDto = RequestVoluntaryDto.builder()
-                .cpf("67351300062")
+        this.voluntaryPutDto = RequestVoluntaryPutDto.builder()
                 .name("cpf teste")
                 .type(TypeEnum.HELPER)
                 .birthDate(LocalDate.now())
@@ -65,7 +66,7 @@ public class VoluntaryServiceTest {
 
     @Test
     void get() {
-        Mockito.when(repository.findById("67351300062")).thenReturn(Optional.ofNullable(this.entity));
+        Mockito.when(repository.findById("88689769196")).thenReturn(Optional.ofNullable(this.entity));
 
         service.get("67351300062");
         Mockito.verify(repository).findById(this.voluntaryDto.getCpf());
@@ -73,17 +74,17 @@ public class VoluntaryServiceTest {
 
     @Test
     void update() {
-        Mockito.when(repository.findById("67351300062")).thenReturn(Optional.ofNullable(this.entity));
+        Mockito.when(repository.findById("88689769196")).thenReturn(Optional.ofNullable(this.entity));
 
-        service.update("67351300062", this.voluntaryDto);
+        service.update("88689769196", this.voluntaryPutDto);
         Mockito.verify(repository).save(this.entity);
     }
 
     @Test
     void delete() {
-        Mockito.when(repository.findById("67351300062")).thenReturn(Optional.ofNullable(this.entity));
+        Mockito.when(repository.findById("88689769196")).thenReturn(Optional.ofNullable(this.entity));
 
-        service.delete("67351300062");
+        service.delete("88689769196");
         Mockito.verify(repository).delete(this.entity);
     }
 }

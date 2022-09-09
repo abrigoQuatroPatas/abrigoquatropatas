@@ -1,4 +1,4 @@
-package com.compass.volunteer;
+package br.com.compasso.voluntary;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
