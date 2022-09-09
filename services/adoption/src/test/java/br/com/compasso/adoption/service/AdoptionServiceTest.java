@@ -91,12 +91,13 @@ class AdoptionServiceTest {
         service.putStatusConsumerApproved(this.consumerDto.getCpf());
     }
 
-    @DisplayName("Deveria realizar a adoção de um pet")
+    @DisplayName("Deveria rejeitar a adoção de um pet")
     @Test
     void putStatusConsumerDisapproved() {
         service.putStatusConsumerDisapproved(this.consumerDto.getCpf());
     }
 
+    @DisplayName("Deveria pegar uma adoção")
     @Test
     void get() {
         Mockito.when(repository.findById(ArgumentMatchers.eq(1L))).thenReturn(Optional.of(this.adoption));
@@ -107,6 +108,7 @@ class AdoptionServiceTest {
         service.get(1L);
     }
 
+    @DisplayName("Deveria pegar todas as adoções")
     @Test
     void getAll() {
         Mockito.when(repository.findAll()).thenReturn(List.of(this.adoption));
@@ -117,6 +119,7 @@ class AdoptionServiceTest {
         service.get();
     }
 
+    @DisplayName("Deveria deletar uma adoção")
     @Test
     void delete() {
         Mockito.when(repository.findById(ArgumentMatchers.eq(1L))).thenReturn(Optional.of(this.adoption));

@@ -1,6 +1,7 @@
 package br.com.compass.email.service;
 
 import br.com.compass.email.dto.response.ResponseEmailDto;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ class EmailServiceTest {
     @Autowired
     private EmailService service;
 
+    @DisplayName("Deveria enviar um email")
     @Test
     void sendEmail() {
         ResponseEmailDto mock = Mockito.mock(ResponseEmailDto.class);
