@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PetResponseDto {
+public class ResponsePetDto {
 
     private String id;
 
@@ -20,7 +20,7 @@ public class PetResponseDto {
 
     private LocalDate arrivalDate;
 
-    private RedemptionAddressResponseDto redemptionAddress;
+    private ResponseRedemptionAddressDto redemptionAddress;
 
     private ResponseOngDto ong;
 }

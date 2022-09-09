@@ -26,4 +26,5 @@ public class OngEntity {
     private Integer amountCat;
     private Integer amountDog;
     private List<String> voluntaryIds = new ArrayList<>();
+    private List<String> petIds = new ArrayList<>();
 }

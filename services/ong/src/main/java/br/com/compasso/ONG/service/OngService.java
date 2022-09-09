@@ -1,16 +1,18 @@
 package br.com.compasso.ONG.service;
 
 import br.com.compasso.ONG.dto.request.RequestOngDto;
-import br.com.compasso.ONG.dto.response.ResponseOngDto;
-import br.com.compasso.ONG.dto.response.ResponseOngVolunteersDto;
-import br.com.compasso.ONG.dto.response.ResponseVoluntaryDto;
+import br.com.compasso.ONG.dto.request.RequestOngPutDto;
+import br.com.compasso.ONG.dto.response.*;
 import br.com.compasso.ONG.entity.Address;
 import br.com.compasso.ONG.entity.OngEntity;
+import br.com.compasso.ONG.exception.MessageFeignException;
+import br.com.compasso.ONG.http.PetClient;
 import br.com.compasso.ONG.http.VoluntaryClient;
 import br.com.compasso.ONG.http.ZipCodeClient;
 import br.com.compasso.ONG.repository.OngRepository;
-import br.com.compasso.ONG.dto.response.ZipCodeResponse;
 import br.com.compasso.ONG.validation.Validations;
+import feign.FeignException;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class OngService {
 
@@ -33,6 +36,9 @@ public class OngService {
     @Autowired
     private VoluntaryClient voluntaryClient;
 
+    @Autowired
+    private PetClient petClient;
+
     public ResponseOngDto post(RequestOngDto ong) {
         OngEntity ongEntity = modelMapper.map(ong, OngEntity.class);
         if (ongRepository.existsById(ong.getCnpj())) {
@@ -44,7 +50,8 @@ public class OngService {
         if (Validations.validateZipCode(zipCode)){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,  "Invalid zipCode!");
         }
-
+        ong.setAmountCat(0);
+        ong.setAmountDog(0);
         ZipCodeResponse zipCodeResponse = zipCodeClient.findAddressByOng(zipCode).block();
 
         Address address = Address.builder()
@@ -70,10 +77,29 @@ public class OngService {
         return all.map(ong -> modelMapper.map(ong, ResponseOngDto.class));
     }
 
+    public ResponseOngPetsDto getWithPets(String cnpj) {
+        OngEntity ongEntity = ongRepository.findById(cnpj).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND));
+        List<ResponsePetDto> ongId;
+        try {
+            ongId = petClient.getOngId(ongEntity.getCnpj());
+        } catch (FeignException e) {
+            throw new MessageFeignException(String.valueOf(e.status()), e.contentUTF8());
+        }
+        ResponseOngPetsDto ong = modelMapper.map(ongEntity, ResponseOngPetsDto.class);
+        ong.setPetIds(ongId);
+        return ong;
+    }
+
     public ResponseOngVolunteersDto getWithVoluntaries(String cnpj) {
         OngEntity ongEntity = ongRepository.findById(cnpj).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND));
-        List<ResponseVoluntaryDto> ongId = voluntaryClient.getOngId(ongEntity.getCnpj());
+        List<ResponseVoluntaryDto> ongId;
+        try {
+            ongId = voluntaryClient.getOngId(ongEntity.getCnpj());
+        } catch (FeignException e) {
+            throw new MessageFeignException(String.valueOf(e.status()), e.contentUTF8());
+        }
         ResponseOngVolunteersDto ong = modelMapper.map(ongEntity, ResponseOngVolunteersDto.class);
         ong.setVoluntaries(ongId);
         return ong;
@@ -85,7 +111,7 @@ public class OngService {
         return modelMapper.map(ongEntity, ResponseOngDto.class);
     }
 
-    public void update(String cnpj, RequestOngDto ong) {
+    public void update(String cnpj, RequestOngPutDto ong) {
         OngEntity ongEntity = ongRepository.findById(cnpj).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND));
         modelMapper.map(ong, ongEntity);
@@ -95,6 +121,21 @@ public class OngService {
     public void delete(String cnpj) {
         OngEntity ongEntity = ongRepository.findById(cnpj).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND));
+        List<ResponsePetDto> petList;
+        List<ResponseVoluntaryDto> voluntaryList;
+
+        try {
+            petList = petClient.getOngId(cnpj);
+            voluntaryList = voluntaryClient.getOngId(cnpj);
+        } catch (FeignException e) {
+            throw new MessageFeignException(String.valueOf(e.status()), e.contentUTF8());
+        }
+
+        if (!petList.isEmpty() || !voluntaryList.isEmpty()) {
+            log.error("delete() - The ONG cannot be deleted because is not empty.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The ONG cannot be deleted because is not empty.");
+        }
+
         ongRepository.delete(ongEntity);
     }
 

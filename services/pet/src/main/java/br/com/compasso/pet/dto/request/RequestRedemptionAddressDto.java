@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
-public class RedemptionAddressRequestDto {
+public class RequestRedemptionAddressDto {
 
     private String state;
 

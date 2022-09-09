@@ -23,7 +23,10 @@ public class HandlerException {
         if (exception.getStatus() == HttpStatus.OK){
             return ResponseEntity.status(HttpStatus.OK).body(new MensagemErro("ONG já existente."));
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MensagemErro("ONG não encontrado."));
+        return ResponseEntity.status(exception.getStatus()).body(
+                new MensagemErro(exception.getReason() != null ?
+                        exception.getReason() :
+                        "Request with problem."));
     }
 
 
