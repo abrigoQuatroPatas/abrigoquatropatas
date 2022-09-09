@@ -15,8 +15,8 @@ import reactor.core.publisher.Mono;
 public class ZipCodeService {
     private final WebClient webClient;
 
-    public ZipCodeService(WebClient.Builder builder) {
-        webClient = builder.baseUrl("https://viacep.com.br/ws").build();
+    public ZipCodeService() {
+        webClient = WebClient.builder().baseUrl("https://viacep.com.br/ws").build();
     }
 
     public Mono<ZipCodeResponse> findZipCodeByCep (String zipCode){
