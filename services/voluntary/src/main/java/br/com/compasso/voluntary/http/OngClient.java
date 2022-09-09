@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public interface OngClient {
 
     @RequestMapping(method = RequestMethod.PUT, value = "/ong/{cnpj}/voluntary/{cpf}")
-    void addVoluntary(@PathVariable String cnpj, @PathVariable String cpf);
+    void addVoluntary(@PathVariable String cnpj, String cpf);
 
     @RequestMapping(method = RequestMethod.GET, value = "/ong/{cnpj}")
     ResponseOngDto getOng(@PathVariable String cnpj);

@@ -68,7 +68,7 @@ public class VoluntaryController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))
             )
     })
-    @PostMapping
+    @PostMapping("/ong/{ongid}")
     public ResponseEntity<ResponseVoluntaryDto> post(@RequestBody @Valid RequestVoluntaryDto voluntary, UriComponentsBuilder componentsBuilder) {
         ResponseVoluntaryDto voluntaryDto = service.post(voluntary);
         URI uri = componentsBuilder.path("/voluntary/{cpf}").buildAndExpand(voluntaryDto.getCpf()).toUri();
@@ -114,9 +114,9 @@ public class VoluntaryController {
                             schema = @Schema(implementation = ErrorMessage.class))
             )
     })
-    @PutMapping("/{cpf}/ong/{cnpj}")
-    public ResponseEntity<Void> addVoluntary(@PathVariable @NotNull String cpf, @PathVariable String cnpj) {
-        service.addVoluntary(cpf,cnpj);
+    @PutMapping("/ong/{cnpj}")
+    public ResponseEntity<Void> addVoluntary(@PathVariable String cnpj) {
+        service.addVoluntary(cnpj);
         return ResponseEntity.ok().build();
     }
 
