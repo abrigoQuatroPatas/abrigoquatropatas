@@ -1,7 +1,7 @@
 package br.com.compasso.pet.controller;
 
-import br.com.compasso.pet.dto.request.PetRequestDto;
-import br.com.compasso.pet.dto.response.PetResponseDto;
+import br.com.compasso.pet.dto.request.RequestPetDto;
+import br.com.compasso.pet.dto.response.ResponsePetDto;
 import br.com.compasso.pet.service.PetService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,29 +23,29 @@ public class PetController {
         private PetService petService;
 
         @PostMapping("/ong/{cnpj}")
-        public ResponseEntity<PetResponseDto> postPet(@RequestBody @Valid PetRequestDto pet, UriComponentsBuilder component, @PathVariable String cnpj) {
+        public ResponseEntity<ResponsePetDto> postPet(@RequestBody @Valid RequestPetDto pet, UriComponentsBuilder component, @PathVariable String cnpj) {
             log.info("postPet() - START - Calling the service");
-            PetResponseDto petRegistered = petService.postPet(pet, cnpj);
+            ResponsePetDto petRegistered = petService.postPet(pet, cnpj);
             URI uri = component.path("/pet/{id}/ong/{cnpj}").buildAndExpand(petRegistered.getId(), cnpj).toUri();
             return ResponseEntity.created(uri).body(petRegistered);
         }
 
         @GetMapping
-        public ResponseEntity<Page<PetResponseDto>> getAllPets(Pageable pageable) {
+        public ResponseEntity<Page<ResponsePetDto>> getAllPets(Pageable pageable) {
             log.info("getAllPets() - START - Calling the service");
-            Page<PetResponseDto> pets = petService.getAllPets(pageable);
+            Page<ResponsePetDto> pets = petService.getAllPets(pageable);
             return ResponseEntity.ok(pets);
         }
 
         @GetMapping("/{id}")
-        public ResponseEntity<PetResponseDto> getPet(@PathVariable String id) {
+        public ResponseEntity<ResponsePetDto> getPet(@PathVariable String id) {
             log.info("getPet() - START - Calling the service");
-            PetResponseDto pet = petService.getPet(id);
+            ResponsePetDto pet = petService.getPet(id);
             return ResponseEntity.ok(pet);
         }
 
         @PutMapping("/{id}")
-        public ResponseEntity<Void> putPet(@PathVariable String id, @RequestBody @Valid PetRequestDto pet) {
+        public ResponseEntity<Void> putPet(@PathVariable String id, @RequestBody @Valid RequestPetDto pet) {
             log.info("putPet() - START - Calling the service");
             petService.updatePet(id, pet);
             return ResponseEntity.noContent().build();

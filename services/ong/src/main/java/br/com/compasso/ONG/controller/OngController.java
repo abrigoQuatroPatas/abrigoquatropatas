@@ -1,6 +1,7 @@
 package br.com.compasso.ONG.controller;
 
 import br.com.compasso.ONG.dto.request.RequestOngDto;
+import br.com.compasso.ONG.dto.request.RequestOngPutDto;
 import br.com.compasso.ONG.dto.response.ResponseOngDto;
 import br.com.compasso.ONG.dto.response.ResponseOngVolunteersDto;
 import br.com.compasso.ONG.service.OngService;
@@ -47,7 +48,7 @@ public class OngController {
     }
 
     @PutMapping("/{cnpj}")
-    public ResponseEntity<Void> put(@PathVariable String cnpj, @RequestBody RequestOngDto ong) {
+    public ResponseEntity<Void> put(@PathVariable String cnpj, @RequestBody RequestOngPutDto ong) {
         service.update(cnpj, ong);
         return ResponseEntity.noContent().build();
     }

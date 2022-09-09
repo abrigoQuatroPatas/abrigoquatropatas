@@ -59,8 +59,11 @@ public class AdoptionService {
             throw new ResponseStatusException(HttpStatus.OK);
         }
 
-        ongClient.putAmountPet(pet.getOng().getCnpj(), pet.getType().toLowerCase());
-
+        try {
+            ongClient.putAmountPet(pet.getOng().getCnpj(), pet.getType().toLowerCase());
+        } catch (FeignException e) {
+            throw new MessageFeignException(String.valueOf(e.status()), e.contentUTF8());
+        }
         consumerClient.putStatusConsumerInProgress(idConsumer);
 
         repository.save(adoption);
