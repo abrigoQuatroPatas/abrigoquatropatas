@@ -59,12 +59,14 @@ public class AdoptionService {
             throw new ResponseStatusException(HttpStatus.OK);
         }
 
+        consumerClient.putStatusConsumerInProgress(idConsumer);
         try {
             ongClient.putAmountPet(pet.getOng().getCnpj(), pet.getType().toLowerCase());
+            consumerClient.putStatusConsumerInProgress(idConsumer);
         } catch (FeignException e) {
             throw new MessageFeignException(String.valueOf(e.status()), e.contentUTF8());
         }
-        consumerClient.putStatusConsumerInProgress(idConsumer);
+
 
         repository.save(adoption);
 
@@ -104,19 +106,34 @@ public class AdoptionService {
     }
 
     public void putStatusConsumerApproved(String idConsumer) {
-        consumerClient.putStatusConsumerApproved(idConsumer);
+        try {
+            consumerClient.putStatusConsumerApproved(idConsumer);
+        } catch (FeignException e) {
+            throw new MessageFeignException(String.valueOf(e.status()), e.contentUTF8());
+        }
     }
 
     public void putStatusConsumerDisapproved(String idConsumer) {
-        consumerClient.putStatusConsumerDisapproved(idConsumer);
+        try {
+            consumerClient.putStatusConsumerDisapproved(idConsumer);
+        } catch (FeignException e) {
+            throw new MessageFeignException(String.valueOf(e.status()), e.contentUTF8());
+        }
     }
 
     public ResponseAdoptionDto get(Long id) {
         AdoptionEntity adoption = repository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND));
-        ResponseConsumerDto consumer = consumerClient.getConsumer(adoption.getConsumerId());
-        ResponsePetDto pet = petClient.getPet(adoption.getPetId());
-        ResponseOngDto ong = ongClient.getOng(pet.getOng().getCnpj());
+        ResponseConsumerDto consumer;
+        ResponsePetDto pet;
+        ResponseOngDto ong;
+        try {
+            consumer = consumerClient.getConsumer(adoption.getConsumerId());
+            pet = petClient.getPet(adoption.getPetId());
+            ong = ongClient.getOng(pet.getOng().getCnpj());
+        } catch (FeignException e) {
+            throw new MessageFeignException(String.valueOf(e.status()), e.contentUTF8());
+        }
         pet.setOng(ong);
 
         return ResponseAdoptionDto.builder()
@@ -130,9 +147,13 @@ public class AdoptionService {
     public void delete(Long id) {
         AdoptionEntity adoption = repository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND));
-        consumerClient.putStatusConsumerNull(adoption.getConsumerId());
-        ResponsePetDto pet = petClient.getPet(adoption.getPetId());
-        ongClient.putAmountPetPlus(pet.getOng().getCnpj(), pet.getType().toLowerCase());
+        try {
+            consumerClient.putStatusConsumerNull(adoption.getConsumerId());
+            ResponsePetDto pet = petClient.getPet(adoption.getPetId());
+            ongClient.putAmountPetPlus(pet.getOng().getCnpj(), pet.getType().toLowerCase());
+        } catch (FeignException e) {
+            throw new MessageFeignException(String.valueOf(e.status()), e.contentUTF8());
+        }
         repository.delete(adoption);
     }
 }
