@@ -9,6 +9,7 @@ import br.com.compasso.adoption.http.ConsumerClient;
 import br.com.compasso.adoption.http.OngClient;
 import br.com.compasso.adoption.http.PetClient;
 import br.com.compasso.adoption.repository.AdoptionRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,12 +24,15 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-@SpringBootTest
+@SpringBootTest(classes = AdoptionService.class)
 @AutoConfigureMockMvc
 class AdoptionServiceTest {
 
     @Autowired
     private AdoptionService service;
+
+    @MockBean
+    private RabbitService rabbitService;
     @MockBean
     private AdoptionRepository repository;
     @MockBean
@@ -42,6 +46,7 @@ class AdoptionServiceTest {
     private ResponseConsumerDto consumerDto;
     private ResponseOngDto ongDto;
     private ResponsePetDto petDto;
+    private ResponseAdoptionDto adoptionDto;
 
     @BeforeEach
     public  void setUp() {
@@ -63,7 +68,7 @@ class AdoptionServiceTest {
                 .ong(ongDto)
                 .build();
 
-        ResponseAdoptionDto adoptionDto = ResponseAdoptionDto.builder()
+        this.adoptionDto = ResponseAdoptionDto.builder()
                 .id(1L)
                 .pet(petDto)
                 .consumer(consumerDto)
@@ -81,7 +86,10 @@ class AdoptionServiceTest {
         Mockito.when(ongClient.getOng(ongDto.getCnpj())).thenReturn(this.ongDto);
         Mockito.when(repository.existsByPetId(petDto.getId())).thenReturn(false);
 
-        service.post("68395952007", "63176c45f6fb020a1b9b84ba");
+        ResponseAdoptionDto post = service.post("68395952007", "63176c45f6fb020a1b9b84ba");
+        post.setId(1L);
+        Assertions.assertNotNull(post);
+        Assertions.assertEquals(post, this.adoptionDto);
 
     }
 
@@ -89,12 +97,14 @@ class AdoptionServiceTest {
     @Test
     void putStatusConsumerApproved() {
         service.putStatusConsumerApproved(this.consumerDto.getCpf());
+        Mockito.verify(consumerClient).putStatusConsumerApproved(this.consumerDto.getCpf());
     }
 
     @DisplayName("Deveria rejeitar a adoção de um pet")
     @Test
     void putStatusConsumerDisapproved() {
         service.putStatusConsumerDisapproved(this.consumerDto.getCpf());
+        Mockito.verify(consumerClient).putStatusConsumerDisapproved(this.consumerDto.getCpf());
     }
 
     @DisplayName("Deveria pegar uma adoção")
@@ -105,7 +115,11 @@ class AdoptionServiceTest {
         Mockito.when(petClient.getPet(adoption.getPetId())).thenReturn(this.petDto);
         Mockito.when(ongClient.getOng(petDto.getOng().getCnpj())).thenReturn(this.ongDto);
 
-        service.get(1L);
+        ResponseAdoptionDto responseAdoptionDto = service.get(1L);
+        responseAdoptionDto.setId(1L);
+        responseAdoptionDto.setAdoptionDate(LocalDate.now());
+        Assertions.assertNotNull(responseAdoptionDto);
+        Assertions.assertEquals(responseAdoptionDto, this.adoptionDto);
     }
 
     @DisplayName("Deveria pegar todas as adoções")
@@ -116,7 +130,8 @@ class AdoptionServiceTest {
         Mockito.when(petClient.getPet(adoption.getPetId())).thenReturn(this.petDto);
         Mockito.when(ongClient.getOng(petDto.getOng().getCnpj())).thenReturn(this.ongDto);
 
-        service.get();
+        List<ResponseAdoptionDto> responseAdoptionDtos = service.get();
+        Assertions.assertNotNull(responseAdoptionDtos);
     }
 
     @DisplayName("Deveria deletar uma adoção")
@@ -126,5 +141,6 @@ class AdoptionServiceTest {
         Mockito.when(petClient.getPet(adoption.getPetId())).thenReturn(this.petDto);
 
         service.delete(1L);
+        Mockito.verify(ongClient).putAmountPetPlus(this.petDto.getOng().getCnpj(), this.petDto.getType());
     }
 }
