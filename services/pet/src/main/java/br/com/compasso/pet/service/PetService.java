@@ -1,16 +1,15 @@
 package br.com.compasso.pet.service;
 
-import br.com.compasso.pet.dto.response.*;
-import br.com.compasso.pet.entity.RedemptionAddressEntity;
-import br.com.compasso.pet.http.AdoptionClient;
-import br.com.compasso.pet.validation.Validations;
 import br.com.compasso.pet.dto.request.RequestPetDto;
+import br.com.compasso.pet.dto.response.*;
 import br.com.compasso.pet.entity.PetEntity;
+import br.com.compasso.pet.entity.RedemptionAddressEntity;
 import br.com.compasso.pet.exception.MessageFeignException;
+import br.com.compasso.pet.http.AdoptionClient;
 import br.com.compasso.pet.http.OngClient;
 import br.com.compasso.pet.http.ZipCodeClient;
 import br.com.compasso.pet.repository.PetRepository;
-
+import br.com.compasso.pet.validation.Validations;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
