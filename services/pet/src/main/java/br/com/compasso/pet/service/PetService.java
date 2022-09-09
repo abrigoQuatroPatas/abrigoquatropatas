@@ -1,16 +1,18 @@
 package br.com.compasso.pet.service;
 
-import br.com.compasso.pet.dto.response.*;
 import br.com.compasso.pet.entity.RedemptionAddressEntity;
-import br.com.compasso.pet.http.AdoptionClient;
 import br.com.compasso.pet.validation.Validations;
-import br.com.compasso.pet.dto.request.RequestPetDto;
+import br.com.compasso.pet.dto.request.PetRequestDto;
+import br.com.compasso.pet.dto.response.PetResponseDto;
+import br.com.compasso.pet.dto.response.RedemptionAddressResponseDto;
+import br.com.compasso.pet.dto.response.ResponseOngDto;
 import br.com.compasso.pet.entity.PetEntity;
 import br.com.compasso.pet.exception.MessageFeignException;
 import br.com.compasso.pet.http.OngClient;
 import br.com.compasso.pet.http.ZipCodeClient;
 import br.com.compasso.pet.repository.PetRepository;
 
+import br.com.compasso.pet.dto.response.ZipCodeResponse;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -41,11 +43,8 @@ public class PetService {
     @Autowired
     private OngClient ong;
 
-    @Autowired
-    private AdoptionClient adoption;
 
-
-    public ResponsePetDto postPet(RequestPetDto requestPetDto, String cnpj) {
+    public PetResponseDto postPet(PetRequestDto petRequestDto, String cnpj) {
         log.info("postPet() - START - Saving pet");
 
         ResponseOngDto ongDto;
@@ -54,10 +53,9 @@ public class PetService {
         } catch (FeignException e) {
             throw new MessageFeignException(String.valueOf(e.status()), e.contentUTF8());
         }
+        PetEntity petEntity = modelMapper.map(petRequestDto, PetEntity.class);
 
-        PetEntity petEntity = modelMapper.map(requestPetDto, PetEntity.class);
-
-        String zipCode = requestPetDto.getRedemptionAddress().getZipCode()
+        String zipCode = petRequestDto.getRedemptionAddress().getZipCode()
                 .replaceAll("\\D", "" );
 
         if (Validations.validateZipCode(zipCode)){
@@ -71,8 +69,8 @@ public class PetService {
                 .city(zipCodeResponse.getCity())
                 .district(zipCodeResponse.getDistrict())
                 .street(zipCodeResponse.getStreet())
-                .number(requestPetDto.getRedemptionAddress().getNumber())
-                .redemptionDate(requestPetDto.getRedemptionAddress().getRedemptionDate())
+                .number(petRequestDto.getRedemptionAddress().getNumber())
+                .redemptionDate(petRequestDto.getRedemptionAddress().getRedemptionDate())
                 .build();
 
         petEntity.setRedemptionAddress(redemptionAddress);
@@ -83,8 +81,8 @@ public class PetService {
         ong.putAmount(cnpj, type);
         petRepository.save(petEntity);
         log.info("postPet() - END - Pet saved");
-        ResponseRedemptionAddressDto address = modelMapper.map(petEntity.getRedemptionAddress(), ResponseRedemptionAddressDto.class);
-        return ResponsePetDto.builder()
+        RedemptionAddressResponseDto address = modelMapper.map(petEntity.getRedemptionAddress(), RedemptionAddressResponseDto.class);
+        return PetResponseDto.builder()
                 .id(petEntity.getId())
                 .name(petEntity.getName())
                 .arrivalDate(petEntity.getArrivalDate())
@@ -94,16 +92,16 @@ public class PetService {
                 .build();
     }
 
-    public Page<ResponsePetDto> getAllPets(Pageable pageable) {
+    public Page<PetResponseDto> getAllPets(Pageable pageable) {
         log.info("getAllPets() - START - Getting all pets");
 
         Page<PetEntity> all = petRepository.findAll(pageable);
-        List<ResponsePetDto> responsePetDtoList = new ArrayList<>();
+        List<PetResponseDto> petResponseDtoList = new ArrayList<>();
 
         all.forEach(petEntity -> {
-            ResponseRedemptionAddressDto address = modelMapper.map(petEntity.getRedemptionAddress(), ResponseRedemptionAddressDto.class);
+            RedemptionAddressResponseDto address = modelMapper.map(petEntity.getRedemptionAddress(), RedemptionAddressResponseDto.class);
             ResponseOngDto ongDto = ong.getOng(petEntity.getOngId());
-            ResponsePetDto petDto = ResponsePetDto.builder()
+            PetResponseDto petDto = PetResponseDto.builder()
                     .id(petEntity.getId())
                     .type(petEntity.getType())
                     .redemptionAddress(address)
@@ -111,15 +109,15 @@ public class PetService {
                     .arrivalDate(petEntity.getArrivalDate())
                     .ong(ongDto)
                     .build();
-            responsePetDtoList.add(petDto);
+            petResponseDtoList.add(petDto);
         });
 
         log.info("getAllPets() - END - all pets obtained");
 
-        return new PageImpl<>(responsePetDtoList);
+        return new PageImpl<>(petResponseDtoList);
     }
 
-    public ResponsePetDto getPet(String id) {
+    public PetResponseDto getPet(String id) {
         log.info("getPet() - START - Getting pet");
 
         PetEntity petEntity = petRepository.findById(id).orElseThrow(() ->
@@ -131,8 +129,8 @@ public class PetService {
             throw new MessageFeignException(String.valueOf(e.status()), e.contentUTF8());
         }
 
-        ResponseRedemptionAddressDto address = modelMapper.map(petEntity.getRedemptionAddress(), ResponseRedemptionAddressDto.class);
-        return ResponsePetDto.builder()
+        RedemptionAddressResponseDto address = modelMapper.map(petEntity.getRedemptionAddress(), RedemptionAddressResponseDto.class);
+        return PetResponseDto.builder()
                 .id(petEntity.getId())
                 .name(petEntity.getName())
                 .arrivalDate(petEntity.getArrivalDate())
@@ -143,7 +141,7 @@ public class PetService {
 
     }
 
-    public void updatePet(String id, RequestPetDto pet) {
+    public void updatePet(String id, PetRequestDto pet) {
         log.info("updatePet() - START - Updating pet");
 
         PetEntity petEntity = petRepository.findById(id).orElseThrow(() ->
@@ -154,35 +152,14 @@ public class PetService {
         log.info("deletePet() - END - Pet updated");
     }
 
-    private boolean verifyIfPetHasBeenAdopted(String petId) {
-        try {
-            List<ResponseAdoptionDto> adoptionList = adoption.getAdoption();
-            for (ResponseAdoptionDto a: adoptionList) {
-                String adoptedPetId = a.getPet().getId();
-                if (petId.equals(adoptedPetId)) {
-                    return true;
-                }
-            }
-        } catch (FeignException e) {
-            log.error("verifyIfPetHasBeenAdopted(): " + e.getMessage());
-            throw new MessageFeignException(String.valueOf(e.status()), e.contentUTF8());
-        }
-        return false;
-    }
-
     public void deletePet(String id) {
         log.info("deletePet() - START - Deleting pet");
 
-        if (verifyIfPetHasBeenAdopted(id) == false) {
-            PetEntity petEntity = petRepository.findById(id).orElseThrow(() ->
-                    new ResponseStatusException(HttpStatus.NOT_FOUND, "Pet not found."));
-            ong.deleteAmount(petEntity.getOngId(), String.valueOf(petEntity.getType()).toLowerCase());
-            petRepository.delete(petEntity);
-            log.info("deletePet() - END - Pet deleted");
-        } else {
-            log.error("deletePet() - This pet was already adopted");
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This pet was already adopted and cannot be deleted.");
-        }
+        PetEntity petEntity = petRepository.findById(id).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND));
+        ong.deleteAmount(petEntity.getOngId(), String.valueOf(petEntity.getType()).toLowerCase());
+        petRepository.delete(petEntity);
+        log.info("deletePet() - END - Pet deleted");
     }
 
 }

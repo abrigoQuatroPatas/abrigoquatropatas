@@ -1,7 +1,6 @@
 package br.com.compasso.ONG.service;
 
 import br.com.compasso.ONG.dto.request.RequestOngDto;
-import br.com.compasso.ONG.dto.request.RequestOngPutDto;
 import br.com.compasso.ONG.dto.response.ResponseOngDto;
 import br.com.compasso.ONG.dto.response.ResponseOngVolunteersDto;
 import br.com.compasso.ONG.dto.response.ResponseVoluntaryDto;
@@ -86,7 +85,7 @@ public class OngService {
         return modelMapper.map(ongEntity, ResponseOngDto.class);
     }
 
-    public void update(String cnpj, RequestOngPutDto ong) {
+    public void update(String cnpj, RequestOngDto ong) {
         OngEntity ongEntity = ongRepository.findById(cnpj).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND));
         modelMapper.map(ong, ongEntity);

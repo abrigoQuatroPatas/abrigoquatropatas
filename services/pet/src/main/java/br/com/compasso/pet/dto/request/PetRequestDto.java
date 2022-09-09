@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Builder
-public class RequestPetDto {
+public class PetRequestDto {
 
     private String id;
 
@@ -27,5 +27,5 @@ public class RequestPetDto {
     private LocalDate arrivalDate;
 
     @Valid
-    private RequestRedemptionAddressDto redemptionAddress;
+    private RedemptionAddressRequestDto redemptionAddress;
 }
