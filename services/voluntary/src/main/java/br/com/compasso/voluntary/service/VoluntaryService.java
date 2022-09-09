@@ -2,6 +2,7 @@ package br.com.compasso.voluntary.service;
 
 import br.com.compasso.voluntary.dto.request.RequestVoluntaryDto;
 import br.com.compasso.voluntary.dto.request.RequestVoluntaryPutDto;
+import br.com.compasso.voluntary.dto.response.ResponseAddressDto;
 import br.com.compasso.voluntary.dto.response.ResponseOngDto;
 import br.com.compasso.voluntary.dto.response.ResponseVoluntaryDto;
 import br.com.compasso.voluntary.entity.AddressEntity;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -46,15 +48,17 @@ public class VoluntaryService {
         List<ResponseVoluntaryDto> responseVoluntaryList = new ArrayList<>();
         try {
             all.forEach(volunteer -> {
+                ResponseAddressDto address = modelMapper.map(volunteer.getAddress(), ResponseAddressDto.class);
                 ResponseOngDto ong = client.getOng(volunteer.getOngId());
                 ResponseVoluntaryDto responseVoluntaryDto = ResponseVoluntaryDto.builder()
                         .cpf(volunteer.getCpf())
                         .name(volunteer.getName())
                         .type(volunteer.getType())
                         .birthDate(volunteer.getBirthDate())
-                        .address(volunteer.getAddress())
+                        .address(address)
                         .status(volunteer.getStatus())
                         .ong(ong)
+
                         .build();
                 responseVoluntaryList.add(responseVoluntaryDto);
             });
@@ -76,8 +80,9 @@ public class VoluntaryService {
         }
     }
 
-    public ResponseVoluntaryDto post(RequestVoluntaryDto volunteer) {
+    public ResponseVoluntaryDto post(RequestVoluntaryDto volunteer, String ongId) {
         VoluntaryEntity voluntaryEntity = modelMapper.map(volunteer, VoluntaryEntity.class);
+        ResponseOngDto ong;
         try {
             if (repository.existsById(voluntaryEntity.getCpf())) {
                 throw new ResponseStatusException(HttpStatus.OK);
@@ -102,13 +107,25 @@ public class VoluntaryService {
 
             voluntaryEntity.setAddress(address);
             voluntaryEntity.getAddress().setZipCode(zipCode.replaceAll("\\D", ""));
-
+            voluntaryEntity.setOngId(ongId);
             voluntaryEntity.setCpf(volunteer.getCpf().replaceAll("\\D", ""));
+            client.addVoluntary(ongId, volunteer.getCpf());
+            ong = client.getOng(ongId);
         } catch (FeignException e) {
             throw new MessageFeignException(String.valueOf(e.status()), e.contentUTF8());
         }
+
         VoluntaryEntity save = repository.save(voluntaryEntity);
-        return modelMapper.map(save, ResponseVoluntaryDto.class);
+        ResponseAddressDto address = modelMapper.map(volunteer.getAddress(), ResponseAddressDto.class);
+        return ResponseVoluntaryDto.builder()
+                .cpf(volunteer.getCpf())
+                .name(volunteer.getName())
+                .type(volunteer.getType())
+                .birthDate(volunteer.getBirthDate())
+                .address(address)
+                .status(volunteer.getStatus())
+                .ong(ong)
+                .build();
     }
 
     public void update(String cpf, RequestVoluntaryPutDto volunteer) {
@@ -127,29 +144,19 @@ public class VoluntaryService {
         }
     }
 
-    public void addVoluntary(String cpf, String cnpj){
-        VoluntaryEntity voluntary = repository.findById(cpf).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        try {
-            voluntary.setOngId(cnpj);
-            client.addVoluntary(cnpj, cpf);
-            repository.save(voluntary);
-        } catch (FeignException e) {
-            throw new MessageFeignException(String.valueOf(e.status()), e.contentUTF8());
-        }
-    }
-
     public List<ResponseVoluntaryDto> getByOngId(String cnpj) {
         List<VoluntaryEntity> voluntaryEntity = repository.findByOngId(cnpj);
         List<ResponseVoluntaryDto> collect = new ArrayList<>();
        try {
            voluntaryEntity.forEach(volunteer -> {
                ResponseOngDto ong = client.getOng(cnpj);
+               ResponseAddressDto address = modelMapper.map(volunteer.getAddress(), ResponseAddressDto.class);
                ResponseVoluntaryDto voluntaryDto = ResponseVoluntaryDto.builder()
                        .cpf(volunteer.getCpf())
                        .name(volunteer.getName())
                        .type(volunteer.getType())
                        .birthDate(volunteer.getBirthDate())
-                       .address(volunteer.getAddress())
+                       .address(address)
                        .status(volunteer.getStatus())
                        .ong(ong)
                        .build();

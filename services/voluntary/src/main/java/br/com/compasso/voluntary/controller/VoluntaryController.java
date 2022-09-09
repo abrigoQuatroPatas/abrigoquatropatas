@@ -68,10 +68,10 @@ public class VoluntaryController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))
             )
     })
-    @PostMapping("/ong/{ongid}")
-    public ResponseEntity<ResponseVoluntaryDto> post(@RequestBody @Valid RequestVoluntaryDto voluntary, UriComponentsBuilder componentsBuilder) {
-        ResponseVoluntaryDto voluntaryDto = service.post(voluntary);
-        URI uri = componentsBuilder.path("/voluntary/{cpf}").buildAndExpand(voluntaryDto.getCpf()).toUri();
+    @PostMapping("/ong/{ongId}")
+    public ResponseEntity<ResponseVoluntaryDto> post(@RequestBody @Valid RequestVoluntaryDto voluntary, UriComponentsBuilder componentsBuilder, @PathVariable String ongId) {
+        ResponseVoluntaryDto voluntaryDto = service.post(voluntary,ongId);
+        URI uri = componentsBuilder.path("/voluntary/{cpf}/ong/{ongId}").buildAndExpand(voluntaryDto.getCpf(), ongId).toUri();
         return ResponseEntity.created(uri).body(voluntaryDto);
     }
 
@@ -105,20 +105,6 @@ public class VoluntaryController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Update voluntary", description = "Vinculate a voluntary to ong ", tags = {"Voluntary"})
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "No content operation"),
-            @ApiResponse(responseCode = "404", description = "Voluntary/Ong not found", content = @Content),
-            @ApiResponse(responseCode = "405", description = "Validation exception",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorMessage.class))
-            )
-    })
-    @PutMapping("/ong/{cnpj}")
-    public ResponseEntity<Void> addVoluntary(@PathVariable String cnpj) {
-        service.addVoluntary(cnpj);
-        return ResponseEntity.ok().build();
-    }
 
     @Operation(summary = "Get a cnpj", description = "Get ong by id", tags = {"Voluntary"})
     @ApiResponses(value = {
