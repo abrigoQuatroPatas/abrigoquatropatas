@@ -7,31 +7,40 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="ONG" />
+        <module name="zipCode" />
+        <module name="adoption" />
+        <module name="eureka" />
         <module name="client" />
+        <module name="ONG" />
         <module name="voluntary" />
         <module name="abrigoQuatroPatas" />
+        <module name="email" />
         <module name="pet" />
-        <module name="eureka" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="abrigoQuatroPatas" target="11" />
-      <module name="client" target="11" />
+      <module name="adoption" target="11" />
+      <module name="client" target="1.8" />
+      <module name="email" target="11" />
       <module name="eureka" target="11" />
       <module name="ONG" target="11" />
       <module name="pet" target="11" />
       <module name="voluntary" target="11" />
+      <module name="zipCode" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="ONG" options="-parameters" />
       <module name="abrigoQuatroPatas" options="-parameters" />
+      <module name="adoption" options="-parameters" />
       <module name="client" options="-parameters" />
+      <module name="email" options="-parameters" />
       <module name="eureka" options="-parameters" />
       <module name="pet" options="-parameters" />
       <module name="voluntary" options="-parameters" />
+      <module name="zipCode" options="-parameters" />
     </option>
   </component>
 </project>
