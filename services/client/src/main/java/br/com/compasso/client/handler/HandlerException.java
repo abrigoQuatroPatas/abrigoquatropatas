@@ -1,5 +1,7 @@
 package br.com.compasso.client.handler;
 
+import br.com.compasso.client.exception.AddressNotFound;
+import br.com.compasso.client.exception.NotStatusNull;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,14 @@ public class HandlerException {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MensagemErro("Cliente não encontrado."));
     }
 
+    @ExceptionHandler(value = NotStatusNull.class)
+    protected ResponseEntity<MensagemErro> handlerStatusDiferenteDeNull(NotStatusNull exception) {
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(new MensagemErro("Não é possível deletar um cliente com status não nulo."));
+    }
+    @ExceptionHandler(value = AddressNotFound.class)
+    protected ResponseEntity<MensagemErro> handlerAddressNotFound (AddressNotFound exception) {
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(new MensagemErro("Não é possível deletar um cliente com status não nulo."));
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<MensagemErro> handleValidationExceptions(MethodArgumentNotValidException e,

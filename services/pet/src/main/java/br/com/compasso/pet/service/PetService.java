@@ -43,7 +43,6 @@ public class PetService {
     @Autowired
     private OngClient ong;
 
-
     public PetResponseDto postPet(PetRequestDto petRequestDto, String cnpj) {
         log.info("postPet() - START - Saving pet");
 
@@ -53,6 +52,7 @@ public class PetService {
         } catch (FeignException e) {
             throw new MessageFeignException(String.valueOf(e.status()), e.contentUTF8());
         }
+
         PetEntity petEntity = modelMapper.map(petRequestDto, PetEntity.class);
 
         String zipCode = petRequestDto.getRedemptionAddress().getZipCode()
