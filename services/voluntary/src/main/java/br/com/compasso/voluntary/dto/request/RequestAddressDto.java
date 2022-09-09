@@ -1,6 +1,7 @@
 package br.com.compasso.voluntary.dto.request;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import javax.validation.constraints.Size;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class RequestAddressDto {
 
     @NotEmpty(message = "Zip code cannot be null or empty")
@@ -21,4 +23,5 @@ public class RequestAddressDto {
     @NotEmpty(message = "Number cannot be null or empty")
     private String number;
     private String district;
+
 }

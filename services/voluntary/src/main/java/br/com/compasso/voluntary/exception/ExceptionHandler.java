@@ -3,6 +3,7 @@ package br.com.compasso.voluntary.exception;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -41,5 +42,10 @@ public class ExceptionHandler {
         log.error("handleApiError() - Invalid API request: " + ex.getTarget().getClass().toString() +
                 " - " + ex.getErrorCount() + " - fields: " + errorMap.toString());
         return errorMap;
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(MessageFeignException.class)
+    protected ResponseEntity<ErrorMessage> feignError(MessageFeignException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorMessage(exception.getStatus(), exception.getMessage()));
     }
 }

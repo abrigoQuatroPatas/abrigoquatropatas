@@ -1,6 +1,5 @@
 package br.com.compasso.voluntary.dto.response;
 
-import br.com.compasso.voluntary.entity.AddressEntity;
 import br.com.compasso.voluntary.enums.Status;
 import br.com.compasso.voluntary.enums.Type;
 import lombok.*;
@@ -18,7 +17,7 @@ public class ResponseVoluntaryDto {
     private String name;
     private Type type;
     private LocalDate birthDate;
-    private AddressEntity address;
     private Status status;
+    private ResponseAddressDto address;
     private ResponseOngDto ong;
 }

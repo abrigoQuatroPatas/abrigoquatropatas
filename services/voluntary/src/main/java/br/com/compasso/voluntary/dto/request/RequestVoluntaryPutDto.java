@@ -1,5 +1,7 @@
 package br.com.compasso.voluntary.dto.request;
 
+
+
 import br.com.compasso.voluntary.enums.Status;
 import br.com.compasso.voluntary.enums.Type;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -7,7 +9,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -18,10 +19,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Data
 @Builder
-public class RequestVoluntaryDto {
+public class RequestVoluntaryPutDto {
 
-    @CPF
-    private String cpf;
     @NotBlank(message = "Name field cannot be blank")
     private String name;
     @NotNull(message = "Type field cannot be blank")
