@@ -104,7 +104,7 @@ public class ClientController {
             )
     })
     @PutMapping("/{cpf}/approved")
-    public ResponseEntity<Void> putStatusDisapproved(@PathVariable String cpf) {
+    public ResponseEntity<Void> putStatusApproved(@PathVariable String cpf) {
         service.putStatusApproved(cpf);
         return ResponseEntity.noContent().build();
     }
@@ -119,7 +119,7 @@ public class ClientController {
             )
     })
     @PutMapping("/{cpf}/disapproved")
-    public ResponseEntity<Void> putStatusApproved(@PathVariable String cpf) {
+    public ResponseEntity<Void> putStatusDisapproved(@PathVariable String cpf) {
         service.putStatusDisapproved(cpf);
         return ResponseEntity.noContent().build();
     }
