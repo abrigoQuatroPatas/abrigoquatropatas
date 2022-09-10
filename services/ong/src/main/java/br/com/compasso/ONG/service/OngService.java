@@ -50,8 +50,8 @@ public class OngService {
         if (Validations.validateZipCode(zipCode)){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,  "Invalid zipCode!");
         }
-        ong.setAmountCat(0);
-        ong.setAmountDog(0);
+        ongEntity.setAmountDog(0);
+        ongEntity.setAmountCat(0);
         ZipCodeResponse zipCodeResponse = zipCodeClient.findAddressByOng(zipCode).block();
 
         Address address = Address.builder()
@@ -115,6 +115,8 @@ public class OngService {
         OngEntity ongEntity = ongRepository.findById(cnpj).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND));
         modelMapper.map(ong, ongEntity);
+        ongEntity.setAmountDog(0);
+        ongEntity.setAmountCat(0);
         ongRepository.save(ongEntity);
     }
 

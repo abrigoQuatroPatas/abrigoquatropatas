@@ -1,7 +1,12 @@
 package br.com.compasso.voluntary.dto.response;
 
-import lombok.Data;
+import lombok.*;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Data
 public class ResponseAddressDto {
 

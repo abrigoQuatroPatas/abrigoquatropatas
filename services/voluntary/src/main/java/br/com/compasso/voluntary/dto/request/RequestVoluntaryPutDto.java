@@ -29,7 +29,7 @@ public class RequestVoluntaryPutDto {
     @NotNull(message = "BirthDate field cannot be null")
     private LocalDate birthDate;
     @Valid
-    private RequestAddressDto address;
+    private RequestPutAddressDto address;
     @NotNull(message = "Status field cannot be blank")
     private Status status;
 

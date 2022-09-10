@@ -23,6 +23,8 @@ public class HandlerException {
     protected ResponseEntity<MensagemErro> handlerClientJaCadastrado(ResponseStatusException exception) {
         if (exception.getStatus() == HttpStatus.OK){
             return ResponseEntity.status(HttpStatus.OK).body(new MensagemErro("Cliente já existente."));
+        } if (exception.getStatus() == HttpStatus.NOT_ACCEPTABLE) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MensagemErro("Cep incorreto"));
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MensagemErro("Cliente não encontrado."));
     }

@@ -40,13 +40,13 @@ public class ClientService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,  "Invalid zipCode!");
         }
 
+        ZipCodeResponse zipCodeResponse;
         try{
-            ZipCodeResponse zipCodeResponse = zipCodeClient.findAddressByClient(client.getCpf()).block();
+            zipCodeResponse = zipCodeClient.findAddressByClient(zipCode).block();
         }catch (ResponseStatusException e){
-            throw new ResponseStatusException(HttpStatus.OK);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
-        ZipCodeResponse zipCodeResponse = zipCodeClient.findAddressByClient(zipCode).block();
         Address address = Address.builder()
                 .state(zipCodeResponse.getState())
                 .city(zipCodeResponse.getCity())

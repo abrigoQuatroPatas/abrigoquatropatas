@@ -46,7 +46,14 @@ public class VoluntaryService {
         List<ResponseVoluntaryDto> responseVoluntaryList = new ArrayList<>();
         try {
             all.forEach(volunteer -> {
-                ResponseAddressDto address = modelMapper.map(volunteer.getAddress(), ResponseAddressDto.class);
+                ResponseAddressDto address = ResponseAddressDto.builder()
+                        .zipCode(volunteer.getAddress().getZipCode())
+                        .state(volunteer.getAddress().getState())
+                        .city(volunteer.getAddress().getCity())
+                        .district(volunteer.getAddress().getDistrict())
+                        .street(volunteer.getAddress().getStreet())
+                        .number(volunteer.getAddress().getNumber())
+                        .build();
                 ResponseOngDto ong = client.getOng(volunteer.getOngId());
                 ResponseVoluntaryDto responseVoluntaryDto = ResponseVoluntaryDto.builder()
                         .cpf(volunteer.getCpf())
@@ -114,7 +121,14 @@ public class VoluntaryService {
         }
 
         VoluntaryEntity save = repository.save(voluntaryEntity);
-        ResponseAddressDto address = modelMapper.map(volunteer.getAddress(), ResponseAddressDto.class);
+        ResponseAddressDto address = ResponseAddressDto.builder()
+                .zipCode(save.getAddress().getZipCode())
+                .state(save.getAddress().getState())
+                .city(save.getAddress().getCity())
+                .district(save.getAddress().getDistrict())
+                .street(save.getAddress().getStreet())
+                .number(save.getAddress().getNumber())
+                .build();
         return ResponseVoluntaryDto.builder()
                 .cpf(volunteer.getCpf())
                 .name(volunteer.getName())
@@ -148,7 +162,14 @@ public class VoluntaryService {
        try {
            voluntaryEntity.forEach(volunteer -> {
                ResponseOngDto ong = client.getOng(cnpj);
-               ResponseAddressDto address = modelMapper.map(volunteer.getAddress(), ResponseAddressDto.class);
+               ResponseAddressDto address = ResponseAddressDto.builder()
+                       .zipCode(volunteer.getAddress().getZipCode())
+                       .state(volunteer.getAddress().getState())
+                       .city(volunteer.getAddress().getCity())
+                       .district(volunteer.getAddress().getDistrict())
+                       .street(volunteer.getAddress().getStreet())
+                       .number(volunteer.getAddress().getNumber())
+                       .build();
                ResponseVoluntaryDto voluntaryDto = ResponseVoluntaryDto.builder()
                        .cpf(volunteer.getCpf())
                        .name(volunteer.getName())

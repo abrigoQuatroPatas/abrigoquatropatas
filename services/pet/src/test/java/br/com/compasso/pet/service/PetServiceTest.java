@@ -1,6 +1,8 @@
 package br.com.compasso.pet.service;
 
 import br.com.compasso.pet.dto.request.RequestPetDto;
+import br.com.compasso.pet.dto.request.RequestPutPetDto;
+import br.com.compasso.pet.dto.request.RequestPutRedemptionAddressDto;
 import br.com.compasso.pet.dto.request.RequestRedemptionAddressDto;
 import br.com.compasso.pet.dto.response.*;
 import br.com.compasso.pet.entity.PetEntity;
@@ -60,6 +62,8 @@ public class PetServiceTest {
     private WebTestClient webClient;
 
     private RequestPetDto petDto;
+
+    private RequestPutPetDto putPetDto;
     private Mono<ZipCodeResponse> zipCodeResponse;
 
     @BeforeEach
@@ -86,12 +90,29 @@ public class PetServiceTest {
                 .redemptionDate(LocalDateTime.now())
                 .build();
 
+        RequestPutRedemptionAddressDto redemptionAddressDto = RequestPutRedemptionAddressDto.builder()
+                .zipCode("88066-260")
+                .state("SC")
+                .city("Florianópolis")
+                .district("Armação do Pântano do Sul")
+                .street("Rodovia Francisco Thomaz dos Santos")
+                .number("4400")
+                .redemptionDate(LocalDateTime.now())
+                .build();
+
         this.petDto = RequestPetDto.builder()
                 .id("123456")
                 .name("Pet Teste")
                 .arrivalDate(LocalDate.now())
                 .type(Type.CAT)
                 .redemptionAddress(redemptionAddress)
+                .build();
+
+        this.putPetDto = RequestPutPetDto.builder()
+                .name("Pet Teste")
+                .arrivalDate(LocalDate.now())
+                .type(Type.CAT)
+                .redemptionAddress(redemptionAddressDto)
                 .build();
     }
 
@@ -147,7 +168,7 @@ public class PetServiceTest {
     void updatePet() {
         Mockito.when(repository.findById("123456")).thenReturn(Optional.ofNullable(this.petEntity));
 
-        service.updatePet("123456", this.requestPetDto);
+        service.updatePet("123456", this.putPetDto);
         Mockito.verify(repository).save(this.petEntity);
     }
 
@@ -156,7 +177,7 @@ public class PetServiceTest {
     void updatePet_ExceptionNotFound() {
         final String ID = "123456";
         Exception exception = assertThrows(ResponseStatusException.class, () -> {
-            service.updatePet(ID, this.requestPetDto);
+            service.updatePet(ID, this.putPetDto);
         });
     }
 

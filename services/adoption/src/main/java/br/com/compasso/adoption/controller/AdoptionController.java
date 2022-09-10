@@ -67,7 +67,7 @@ public class AdoptionController {
                     schema = @Schema(implementation = MensagemErro.class))
             )
     })
-    @GetMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<ResponseAdoptionDto> get(@PathVariable Long id) {
         ResponseAdoptionDto adoption = service.get(id);
         return ResponseEntity.ok(adoption);

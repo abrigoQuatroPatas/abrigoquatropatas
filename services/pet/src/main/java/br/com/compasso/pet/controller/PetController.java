@@ -1,6 +1,7 @@
 package br.com.compasso.pet.controller;
 
 import br.com.compasso.pet.dto.request.RequestPetDto;
+import br.com.compasso.pet.dto.request.RequestPutPetDto;
 import br.com.compasso.pet.dto.response.ResponsePetDto;
 import br.com.compasso.pet.handler.MensagemErro;
 import br.com.compasso.pet.service.PetService;
@@ -96,7 +97,7 @@ public class PetController {
             @ApiResponse(responseCode = "404", description = "Pet not found", content = @Content)
     })
     @PutMapping("/{id}")
-    public ResponseEntity<Void> putPet(@PathVariable String id, @RequestBody @Valid RequestPetDto pet) {
+    public ResponseEntity<Void> putPet(@PathVariable String id, @RequestBody @Valid RequestPutPetDto pet) {
         log.info("putPet() - START - Calling the service");
         petService.updatePet(id, pet);
         return ResponseEntity.noContent().build();

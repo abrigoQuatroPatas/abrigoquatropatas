@@ -21,7 +21,7 @@ public class RequestClientPutDto {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate birthDate;
     @Valid
-    private RequestAddressDto address;
+    private RequestPutAddressDto address;
     @Email
     private String email;
 }

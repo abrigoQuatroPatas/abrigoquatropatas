@@ -1,6 +1,7 @@
 package br.com.compasso.pet.service;
 
 import br.com.compasso.pet.dto.request.RequestPetDto;
+import br.com.compasso.pet.dto.request.RequestPutPetDto;
 import br.com.compasso.pet.dto.response.*;
 import br.com.compasso.pet.entity.PetEntity;
 import br.com.compasso.pet.entity.RedemptionAddressEntity;
@@ -150,7 +151,7 @@ public class PetService {
                 .build();
     }
 
-    public void updatePet(String id, RequestPetDto pet) {
+    public void updatePet(String id, RequestPutPetDto pet) {
         log.info("updatePet() - START - Updating pet");
 
         PetEntity petEntity = petRepository.findById(id).orElseThrow(() ->

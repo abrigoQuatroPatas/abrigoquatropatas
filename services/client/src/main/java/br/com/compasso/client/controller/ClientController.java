@@ -67,7 +67,7 @@ public class ClientController {
                             schema = @Schema(implementation = MensagemErro.class))
             )
     })
-    @GetMapping(value = "/{cpf}", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{cpf}", produces = "application/json")
     public ResponseEntity<ResponseClientDto> get(@PathVariable String cpf) {
         ResponseClientDto clientDto = service.get(cpf);
         return ResponseEntity.ok(clientDto);

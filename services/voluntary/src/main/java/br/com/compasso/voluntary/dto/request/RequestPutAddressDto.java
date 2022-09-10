@@ -12,16 +12,20 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class RequestAddressDto {
+public class RequestPutAddressDto {
 
     @NotBlank(message = "Zip code cannot be null or empty")
     private String zipCode;
+    @NotBlank
     private String street;
+    @NotBlank
     private String city;
+    @NotBlank
     private String state;
     @Size(max = 10)
     @NotBlank(message = "Number cannot be null or empty")
     private String number;
+    @NotBlank
     private String district;
 
 }
